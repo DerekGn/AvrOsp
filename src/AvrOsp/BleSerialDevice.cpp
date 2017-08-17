@@ -22,7 +22,7 @@
 
 #include "BleSerialDevice.hpp"
 
-HANDLE BleSerialDevice::GetBLEHandle(GUID deviceServiceGuid)
+HANDLE BleSerialDevice::GetBleHandle(GUID deviceServiceGuid)
 {
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did;
@@ -76,6 +76,108 @@ HANDLE BleSerialDevice::GetBLEHandle(GUID deviceServiceGuid)
 	return hComm;
 }
 
+PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice)
+{
+	char buffer[100];
+	USHORT serviceBufferCount;
+	////////////////////////////////////////////////////////////////////////////
+	// Determine Services Buffer Size
+	////////////////////////////////////////////////////////////////////////////
+
+	HRESULT hr = BluetoothGATTGetServices(
+		hBleDevice,
+		0,
+		NULL,
+		&serviceBufferCount,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
+	{
+		sprintf_s(buffer, "BluetoothGATTGetServices - Buffer Size 0x%x", hr);
+		throw new ErrorMsg(buffer);
+	}
+
+	PBTH_LE_GATT_SERVICE pServiceBuffer = (PBTH_LE_GATT_SERVICE)
+		malloc(sizeof(BTH_LE_GATT_SERVICE) * serviceBufferCount);
+
+	if (NULL == pServiceBuffer)
+		throw new ErrorMsg("pServiceBuffer out of memory\r\n");
+	else
+		RtlZeroMemory(pServiceBuffer, sizeof(BTH_LE_GATT_SERVICE) * serviceBufferCount);
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Retrieve Services
+	////////////////////////////////////////////////////////////////////////////
+
+	USHORT numServices;
+	hr = BluetoothGATTGetServices(
+		hBleDevice,
+		serviceBufferCount,
+		pServiceBuffer,
+		&numServices,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (S_OK != hr) 
+	{
+		sprintf_s(buffer, "BluetoothGATTGetServices - Buffer Size 0x%x", hr);
+		throw new ErrorMsg(buffer);
+	}
+
+	return pServiceBuffer;
+}
+
+PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer)
+{
+	USHORT charBufferSize;
+	HRESULT hr = BluetoothGATTGetCharacteristics(
+		hBleDevice,
+		pServicesBuffer,
+		0,
+		NULL,
+		&charBufferSize,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) {
+		printf("BluetoothGATTGetCharacteristics - Buffer Size %d\r\n", hr);
+	}
+
+	PBTH_LE_GATT_CHARACTERISTIC pCharBuffer;
+	if (charBufferSize > 0) {
+		pCharBuffer = (PBTH_LE_GATT_CHARACTERISTIC)
+			malloc(charBufferSize * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+
+		if (NULL == pCharBuffer) {
+			printf("pCharBuffer out of memory\r\n");
+		}
+		else {
+			RtlZeroMemory(pCharBuffer,
+				charBufferSize * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+		}
+
+		////////////////////////////////////////////////////////////////////////////
+		// Retrieve Characteristics
+		////////////////////////////////////////////////////////////////////////////
+		USHORT numChars;
+		hr = BluetoothGATTGetCharacteristics(
+			hBleDevice,
+			pServicesBuffer,
+			charBufferSize,
+			pCharBuffer,
+			&numChars,
+			BLUETOOTH_GATT_FLAG_NONE);
+
+		if (S_OK != hr) {
+			printf("BluetoothGATTGetCharacteristics - Actual Data %d\r\n", hr);
+		}
+
+		if (numChars != charBufferSize) {
+			printf("buffer size and buffer size actual size mismatch\r\n");
+		}
+	}
+
+	return pCharBuffer;
+}
+
 BleSerialDevice::BleSerialDevice(string deviceServiceUUID)
 {
 	if (deviceServiceUUID.length() == 0)
@@ -88,18 +190,21 @@ BleSerialDevice::BleSerialDevice(string deviceServiceUUID)
 
 	if(err != NOERROR)
 		throw new ErrorMsg("Device service UUID is incorrectly formatted guid");
-
-	hBleDevice = GetBLEHandle(deviceServiceGuid);
 }
 
 BleSerialDevice::~BleSerialDevice()
 {
 	if(hBleDevice != NULL)
-	CloseHandle(hBleDevice);
+		CloseHandle(hBleDevice);
 }
 
 void BleSerialDevice::openChannel()
 {
+	hBleDevice = GetBleHandle(deviceServiceGuid);
+
+	pServicesBuffer = GetBleDeviceServices(hBleDevice);
+
+	pCharacteristicsBuffer = GetBleDeviceCharacteristics(hBleDevice, pServicesBuffer);
 }
 
 void BleSerialDevice::closeChannel()

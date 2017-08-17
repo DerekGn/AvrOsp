@@ -41,11 +41,15 @@ using namespace std;
 class BleSerialDevice : public CommChannel
 {
 	protected:
+		HANDLE hBleDevice = NULL;
 		GUID deviceServiceGuid;
-		HANDLE hBleDevice;
+		PBTH_LE_GATT_SERVICE pServicesBuffer = NULL;
+		PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer = NULL;
 
 	private:
-		HANDLE GetBLEHandle(__in GUID deviceServiceGuid);
+		HANDLE GetBleHandle(__in GUID deviceServiceGuid);
+		PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice);
+		PBTH_LE_GATT_CHARACTERISTIC GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer);
 
 	public:
 		BleSerialDevice(string deviceServiceUUID);
