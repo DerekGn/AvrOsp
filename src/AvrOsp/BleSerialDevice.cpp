@@ -38,16 +38,14 @@ HANDLE BleSerialDevice::GetBleHandle(GUID deviceServiceGuid)
 	did.cbSize = sizeof(SP_DEVICE_INTERFACE_DATA);
 	dd.cbSize = sizeof(SP_DEVINFO_DATA);
 
-	for (DWORD i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &bluetoothInterfaceGUID, i, &did); i++)
-	{
+	for (DWORD i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &bluetoothInterfaceGUID, i, &did); i++) {
 		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData;
 
 		DeviceInterfaceDetailData.cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
 
 		DWORD size = 0;
 
-		if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, NULL, 0, &size, 0))
-		{
+		if (!SetupDiGetDeviceInterfaceDetail(hDI, &did, NULL, 0, &size, 0)) {
 			int err = GetLastError();
 
 			if (err == ERROR_NO_MORE_ITEMS) break;
@@ -78,7 +76,7 @@ HANDLE BleSerialDevice::GetBleHandle(GUID deviceServiceGuid)
 
 PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, USHORT* pgattServiceCount)
 {
-	char buffer[100];
+	char buffer[50];
 	USHORT serviceBufferCount;
 	////////////////////////////////////////////////////////////////////////////
 	// Determine Services Buffer Size
@@ -91,8 +89,7 @@ PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, US
 		&serviceBufferCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
-	{
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) {
 		sprintf_s(buffer, "BluetoothGATTGetServices - Buffer Size 0x%x", hr);
 		throw new ErrorMsg(buffer);
 	}
@@ -117,8 +114,7 @@ PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, US
 		&numServices,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (S_OK != hr) 
-	{
+	if (S_OK != hr) {
 		sprintf_s(buffer, "BluetoothGATTGetServices - Buffer Size 0x%x", hr);
 		throw new ErrorMsg(buffer);
 	}
@@ -126,34 +122,35 @@ PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, US
 	return pServiceBuffer;
 }
 
-PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, USHORT* pgattCharacteristicsCount)
+PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, 
+	USHORT* pGattCharacteristicsCount)
 {
-	USHORT charBufferSize;
+	char buffer[50];
+
 	HRESULT hr = BluetoothGATTGetCharacteristics(
 		hBleDevice,
 		pServicesBuffer,
 		0,
 		NULL,
-		&charBufferSize,
+		pGattCharacteristicsCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
 	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) {
-		printf("BluetoothGATTGetCharacteristics - Buffer Size %d\r\n", hr);
-	}
-
+		sprintf_s(buffer, "BluetoothGATTGetCharacteristics - Buffer Size 0x%x", hr);
+		throw new ErrorMsg(buffer);
+	}	
+	
 	PBTH_LE_GATT_CHARACTERISTIC pCharBuffer;
-	if (charBufferSize > 0) {
+	if (pGattCharacteristicsCount > 0) {
 		pCharBuffer = (PBTH_LE_GATT_CHARACTERISTIC)
-			malloc(charBufferSize * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+			malloc(*pGattCharacteristicsCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
 
-		if (NULL == pCharBuffer) {
-			printf("pCharBuffer out of memory\r\n");
-		}
-		else {
+		if (NULL == pCharBuffer)
+			throw new ErrorMsg("pCharBuffer out of memory");
+		else
 			RtlZeroMemory(pCharBuffer,
-				charBufferSize * sizeof(BTH_LE_GATT_CHARACTERISTIC));
-		}
-
+				*pGattCharacteristicsCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+	
 		////////////////////////////////////////////////////////////////////////////
 		// Retrieve Characteristics
 		////////////////////////////////////////////////////////////////////////////
@@ -161,25 +158,27 @@ PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE 
 		hr = BluetoothGATTGetCharacteristics(
 			hBleDevice,
 			pServicesBuffer,
-			charBufferSize,
+			*pGattCharacteristicsCount,
 			pCharBuffer,
 			&numChars,
 			BLUETOOTH_GATT_FLAG_NONE);
 
 		if (S_OK != hr) {
-			printf("BluetoothGATTGetCharacteristics - Actual Data %d\r\n", hr);
+			sprintf_s(buffer, "BluetoothGATTGetCharacteristics - Actual Data 0x%X", hr);
+			throw new ErrorMsg(buffer);
 		}
 
-		if (numChars != charBufferSize) {
-			printf("buffer size and buffer size actual size mismatch\r\n");
-		}
+		if (numChars != *pGattCharacteristicsCount)
+			throw new ErrorMsg("buffer size and buffer size actual size mismatch");
 	}
 
 	return pCharBuffer;
 }
 
-PBTH_LE_GATT_DESCRIPTOR BleSerialDevice::GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, USHORT * pgattDescriptorCount)
+PBTH_LE_GATT_DESCRIPTOR BleSerialDevice::GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, 
+	USHORT gattCharacteristicsCount, USHORT * pGattDescriptorCount, list<DescriptorValues> descriptorValues)
 {
+
 	return PBTH_LE_GATT_DESCRIPTOR();
 }
 
