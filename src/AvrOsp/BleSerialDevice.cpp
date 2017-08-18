@@ -76,7 +76,7 @@ HANDLE BleSerialDevice::GetBleHandle(GUID deviceServiceGuid)
 	return hComm;
 }
 
-PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice)
+PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, USHORT* pgattServiceCount)
 {
 	char buffer[100];
 	USHORT serviceBufferCount;
@@ -126,7 +126,7 @@ PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice)
 	return pServiceBuffer;
 }
 
-PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer)
+PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, USHORT* pgattCharacteristicsCount)
 {
 	USHORT charBufferSize;
 	HRESULT hr = BluetoothGATTGetCharacteristics(
@@ -178,6 +178,16 @@ PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE 
 	return pCharBuffer;
 }
 
+PBTH_LE_GATT_DESCRIPTOR BleSerialDevice::GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, USHORT * pgattDescriptorCount)
+{
+	return PBTH_LE_GATT_DESCRIPTOR();
+}
+
+PBTH_LE_GATT_DESCRIPTOR_VALUE BleSerialDevice::GetBleDeviceDescriptorValues(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer)
+{
+	return PBTH_LE_GATT_DESCRIPTOR_VALUE();
+}
+
 BleSerialDevice::BleSerialDevice(string deviceServiceUUID)
 {
 	if (deviceServiceUUID.length() == 0)
@@ -202,9 +212,9 @@ void BleSerialDevice::openChannel()
 {
 	hBleDevice = GetBleHandle(deviceServiceGuid);
 
-	pServicesBuffer = GetBleDeviceServices(hBleDevice);
+	pServicesBuffer = GetBleDeviceServices(hBleDevice, &gattServiceCount);
 
-	pCharacteristicsBuffer = GetBleDeviceCharacteristics(hBleDevice, pServicesBuffer);
+	pCharacteristicsBuffer = GetBleDeviceCharacteristics(hBleDevice, pServicesBuffer, &gattCharacteristicCount);
 }
 
 void BleSerialDevice::closeChannel()

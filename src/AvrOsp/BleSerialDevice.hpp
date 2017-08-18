@@ -35,21 +35,32 @@ using namespace std;
 #pragma comment(lib, "SetupAPI")
 #pragma comment(lib, "BluetoothApis.lib")
 
+#include <tuple>
+
 #include "CommChannel.hpp"
 #include "ErrorMsg.hpp"
 
 class BleSerialDevice : public CommChannel
 {
+	typedef tuple<USHORT, PBTH_LE_GATT_DESCRIPTOR_VALUE> DescriptorValues;
+
 	protected:
 		HANDLE hBleDevice = NULL;
 		GUID deviceServiceGuid;
+		USHORT gattServiceCount = 0;
+		USHORT gattCharacteristicCount = 0;
+		USHORT gattDescriptorCount = 0;
 		PBTH_LE_GATT_SERVICE pServicesBuffer = NULL;
 		PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer = NULL;
+		PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer = NULL;
+		PBTH_LE_GATT_DESCRIPTOR_VALUE pDescriptorValueBuffer = NULL;
 
 	private:
-		HANDLE GetBleHandle(__in GUID deviceServiceGuid);
-		PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice);
-		PBTH_LE_GATT_CHARACTERISTIC GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer);
+		static HANDLE GetBleHandle(__in GUID deviceServiceGuid);
+		static PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice, USHORT* pGattServicesCount);
+		static PBTH_LE_GATT_CHARACTERISTIC GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, USHORT* pGattCharacteristicsCount);
+		static PBTH_LE_GATT_DESCRIPTOR GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, USHORT* pgattDescriptorCount);
+		static PBTH_LE_GATT_DESCRIPTOR_VALUE GetBleDeviceDescriptorValues(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer);
 
 	public:
 		BleSerialDevice(string deviceServiceUUID);
