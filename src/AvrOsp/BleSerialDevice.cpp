@@ -187,18 +187,23 @@ PBTH_LE_GATT_DESCRIPTOR_VALUE BleSerialDevice::GetBleDeviceDescriptorValues(HAND
 	return PBTH_LE_GATT_DESCRIPTOR_VALUE();
 }
 
-BleSerialDevice::BleSerialDevice(string deviceServiceUUID)
+//BleSerialDevice::BleSerialDevice(GUID bleDeviceInterfaceId)
+//{
+//	/*if (deviceServiceUUID.length() == 0)
+//		throw new ErrorMsg("Device service UUID cannot be empty!");
+//
+//	if (deviceServiceUUID.length() < 32)
+//		throw new ErrorMsg("Device service UUID cannot be less than 32 characters!");
+//
+//	HRESULT err = CLSIDFromString(wstring(deviceServiceUUID.begin(), deviceServiceUUID.end()).c_str(), &deviceServiceGuid);
+//
+//	if(err != NOERROR)
+//		throw new ErrorMsg("Device service UUID is incorrectly formatted guid");*/
+//}
+
+BleSerialDevice::BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor)
 {
-	if (deviceServiceUUID.length() == 0)
-		throw new ErrorMsg("Device service UUID cannot be empty!");
-
-	if (deviceServiceUUID.length() < 32)
-		throw new ErrorMsg("Device service UUID cannot be less than 32 characters!");
-
-	HRESULT err = CLSIDFromString(wstring(deviceServiceUUID.begin(), deviceServiceUUID.end()).c_str(), &deviceServiceGuid);
-
-	if(err != NOERROR)
-		throw new ErrorMsg("Device service UUID is incorrectly formatted guid");
+	bleSerialDeviceDescriptor = _bleSerialDeviceDescriptor;
 }
 
 BleSerialDevice::~BleSerialDevice()

@@ -38,6 +38,7 @@ using namespace std;
 #include <tuple>
 #include <list>
 
+#include "BleSerialDeviceDescriptor.hpp"
 #include "CommChannel.hpp"
 #include "ErrorMsg.hpp"
 
@@ -56,6 +57,8 @@ class BleSerialDevice : public CommChannel
 		PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer = NULL;
 		PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer = NULL;
 		
+		BleSerialDeviceDescriptor bleSerialDeviceDescriptor;
+
 		static HANDLE GetBleHandle(__in GUID deviceServiceGuid);
 		static PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice, USHORT* pGattServicesCount);
 		static PBTH_LE_GATT_CHARACTERISTIC GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, USHORT* pGattCharacteristicsCount);
@@ -63,7 +66,7 @@ class BleSerialDevice : public CommChannel
 		static PBTH_LE_GATT_DESCRIPTOR_VALUE GetBleDeviceDescriptorValues(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer);
 
 	public:
-		BleSerialDevice(string deviceServiceUUID);
+		BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor);
 
 		~BleSerialDevice();
 
