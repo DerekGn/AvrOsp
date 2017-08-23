@@ -28,29 +28,29 @@ BleSerialDeviceDescriptor::BleSerialDeviceDescriptor()
 {
 }
 
-BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceId, GUID _serialInCharacteristic, GUID _serialOutCharacteristic)
+BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceUUID, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
 {
 	bleSerialDeviceType = _bleSerialDeviceType;
-	bleDeviceInterfaceId = _bleDeviceInterfaceId;
-	serialInCharacteristic = _serialInCharacteristic;
-	serialOutCharacteristic = _serialOutCharacteristic;
+	bleDeviceInterfaceUUID = _bleDeviceInterfaceUUID;
+	serialInCharacteristicUUID = _serialInCharacteristicUUID;
+	serialOutCharacteristicUUID = _serialOutCharacteristicUUID;
 }
 
 BleSerialDeviceDescriptor::~BleSerialDeviceDescriptor()
 {
 }
 
-GUID BleSerialDeviceDescriptor::getBleDeviceInterfaceId()
+GUID BleSerialDeviceDescriptor::getBleDeviceInterfaceUUID()
 {
-	return GUID();
+	return bleDeviceInterfaceUUID;
 }
 
-GUID BleSerialDeviceDescriptor::getSerialInCharacteristic()
+GUID BleSerialDeviceDescriptor::getSerialInCharacteristicUUID()
 {
-	return GUID();
+	return serialInCharacteristicUUID;
 }
 
-GUID BleSerialDeviceDescriptor::getSerialOutCharacteristic()
+GUID BleSerialDeviceDescriptor::getSerialOutCharacteristicUUID()
 {
-	return GUID();
+	return serialOutCharacteristicUUID;
 }

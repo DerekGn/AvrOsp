@@ -30,23 +30,23 @@ using namespace std;
 class BleSerialDeviceDescriptor
 {
 	private:
-		string bleSerialDeviceType;		// The ble serial device type
-		GUID bleDeviceInterfaceId;		// The ble device interface used to create a handle to the device
-		GUID serialInCharacteristic;	// The characteristic for serial in data
-		GUID serialOutCharacteristic;	// The characteristic for serial out data
+		string bleSerialDeviceType;			// The ble serial device type
+		GUID bleDeviceInterfaceUUID;		// The ble device interface used to create a handle to the device
+		GUID serialInCharacteristicUUID;	// The characteristic for serial in data
+		GUID serialOutCharacteristicUUID;	// The characteristic for serial out data
 
 	public:
 		BleSerialDeviceDescriptor();
 
-		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceId, GUID _serialInCharacteristic, GUID _serialOutCharacteristic);
+		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceUUID, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
 		
 		~BleSerialDeviceDescriptor();
 
-		GUID getBleDeviceInterfaceId();
+		GUID getBleDeviceInterfaceUUID();
 
-		GUID getSerialInCharacteristic();
+		GUID getSerialInCharacteristicUUID();
 
-		GUID getSerialOutCharacteristic();
+		GUID getSerialOutCharacteristicUUID();
 };
 
 #endif
