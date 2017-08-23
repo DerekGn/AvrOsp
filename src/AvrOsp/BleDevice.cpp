@@ -22,6 +22,7 @@
 #include <Setupapi.h>
 
 #pragma comment(lib, "SetupAPI")
+#pragma comment(lib, "Rpcrt4")
 
 #include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
@@ -33,16 +34,14 @@ using namespace std;
 
 string BleDevice::guidToString(GUID uuid)
 {
-	//TODO: fix W/narrow
-	/*
 	string guid;
 
 	RPC_WSTR szUuid = NULL;
-	if (UuidToStringW(&uuid, &szUuid) == RPC_S_OK)
+	if (UuidToString(&uuid, &szUuid) == RPC_S_OK)
 	{
 		guid = (char*)szUuid;
-		RpcStringFreeW(&szUuid);
-	}*/
+		RpcStringFree(&szUuid);
+	}
 
 	return string();
 }
