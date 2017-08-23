@@ -20,9 +20,12 @@
 ****************************************************************************/
 #include <windows.h>
 #include <Setupapi.h>
+#include <BluetoothAPIs.h>
 
-#pragma comment(lib, "SetupAPI")
 #pragma comment(lib, "Rpcrt4")
+#pragma comment(lib, "SetupAPI")
+#pragma comment(lib, "BluetoothAPIs")
+
 
 #include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
@@ -122,6 +125,18 @@ HANDLE BleDevice::getBleDeviceHandle(__in GUID deviceInterfaceUUID)
 	return hComm;
 }
 
+PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hDeviceHandle, USHORT * _pServiceCount)
+{
+	HRESULT hr = BluetoothGATTGetServices(
+		_hDeviceHandle,
+		0,
+		NULL,
+		_pServiceCount,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	return PBTH_LE_GATT_SERVICE();
+}
+
 string BleDevice::getLastError()
 {
 	DWORD errorMessageID = ::GetLastError();
@@ -149,8 +164,11 @@ BleDevice::BleDevice(GUID _deviceInterfaceUUID)
 
 BleDevice::~BleDevice()
 {
-	if(hBleDevice != NULL)
+	if(hBleDevice != nullptr)
 		CloseHandle(hBleDevice);
+
+	if (pGattServiceBuffer != nullptr)
+		free(pGattServiceBuffer);
 }
 
 GUID BleDevice::getDeviceInterfaceUUID()

@@ -24,21 +24,28 @@
 using namespace std;
 
 #include <Rpc.h>
+#include <bluetoothleapis.h>
 
 #include<string>
 
 class BleDevice
 {
 	private:
-		HANDLE hBleDevice = NULL;
+		
+		HANDLE hBleDevice = nullptr;
+
 		GUID deviceInterfaceUUID;
 		
-		static string guidToString(__in GUID uuid);
+		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 
-		static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
-		
 		static string getLastError();
 
+		static string guidToString(__in GUID _uuid);
+
+		static HANDLE getBleDeviceHandle(__in GUID _deviceInterfaceUUID);
+
+		static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE _deviceHandle, USHORT * _pServiceCount);
+		
 	public:
 		BleDevice(__in GUID _deviceInterfaceUUID);
 		
