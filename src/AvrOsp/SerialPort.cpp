@@ -48,7 +48,7 @@ SerialPort::~SerialPort()
 /* Open the communication channel */
 void SerialPort::openChannel()
 {
-	char comName[] = "COMx";
+	wchar_t comName[] = L"COMx";
 	COMMTIMEOUTS comTimeouts;
 
 	/* Check if channel already open */
