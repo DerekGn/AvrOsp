@@ -59,6 +59,10 @@ class Utility
 		bool fileExists( string filename );
 		void saveString( string txt, string filename );
 
+		string getLastError();
+
+		void handleMallocFailure(unsigned long size);
+
 #ifndef NOREGISTRY	
 		string getRegistryValue( const string & path, const string & value );
 #endif

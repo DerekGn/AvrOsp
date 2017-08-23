@@ -35,6 +35,8 @@ class BleDevice
 {
 private:
 
+	list<BleGattService*> gattServices;
+
 	HANDLE hBleDevice = nullptr;
 
 	GUID deviceInterfaceUUID;
@@ -42,22 +44,16 @@ private:
 	USHORT gattServiceCount = 0;
 
 	PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
+	
+	static string guidToString(__in GUID uuid);
 
-	static string getLastError();
+	static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
 
-	static string guidToString(__in GUID _uuid);
+	static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE hBleDeviceHandle, _Out_ USHORT * pGattServiceCount);
+	
+	//static PBTH_LE_GATT_CHARACTERISTIC_VALUE getGattCharacteristicValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
 
-	static HANDLE getBleDeviceHandle(__in GUID _deviceInterfaceUUID);
-
-	static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE _hBleDeviceHandle, _Out_ USHORT * _pGattServiceCount);
-
-	static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE _pGattService, _Out_ USHORT * _pGattCharcteristicsCount);
-
-	static PBTH_LE_GATT_CHARACTERISTIC_VALUE getGattCharacteristicValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
-
-	static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, _Out_ USHORT * _pGattDescriptorsCount);
-
-	static PBTH_LE_GATT_DESCRIPTOR_VALUE getGattDescriptorValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor);
+	//static PBTH_LE_GATT_DESCRIPTOR_VALUE getGattDescriptorValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor);
 
 public:
 	BleDevice(GUID _deviceInterfaceUUID);

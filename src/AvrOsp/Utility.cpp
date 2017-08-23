@@ -20,6 +20,9 @@
  ****************************************************************************/
 #include "Utility.hpp"
 
+#include <windows.h>
+
+#include <sstream>
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -148,6 +151,32 @@ void Utility::saveString( string txt, string filename )
 	f.close();
 }
 
+string Utility::getLastError()
+{
+	DWORD errorMessageID = ::GetLastError();
+
+	if (errorMessageID == 0)
+		return string();
+
+	LPSTR messageBuffer = nullptr;
+	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+
+	string message(messageBuffer, size);
+
+	LocalFree(messageBuffer);
+
+	return message;
+}
+
+
+void Utility::handleMallocFailure(unsigned long size)
+{
+	stringstream msg;
+	msg << "Unable to allocate [" << size << "] bytes";
+
+	throw new ErrorMsg(msg.str());
+}
 
 #ifndef NOREGISTRY
 string Utility::getRegistryValue( const string & path, const string & value )

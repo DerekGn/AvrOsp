@@ -20,14 +20,89 @@
 *
 ****************************************************************************/
 #include "BleGattService.hpp"
+#include "ErrorMsg.hpp"
+#include "Utility.hpp"
 
-BleGattService::BleGattService(HANDLE hbleDevice, PBTH_LE_GATT_SERVICE _pGattService)
+#include <sstream>
+
+using namespace std;
+
+PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_SERVICE _pGattService, USHORT * _pGattCharcteristicsCount)
+{
+	USHORT expectedCharBufferCount;
+	HRESULT hr = BluetoothGATTGetCharacteristics(
+		_hBleDeviceHandle,
+		_pGattService,
+		0,
+		NULL,
+		&expectedCharBufferCount,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (ERROR_MORE_DATA != hr)
+	{
+		stringstream msg;
+		msg << "Unable to determine the number of gatt characteristics. Reason: ["
+			<< Util.getLastError() << "]";
+
+		throw new ErrorMsg(msg.str());
+	}
+
+	PBTH_LE_GATT_CHARACTERISTIC pCharBuffer;
+	if (expectedCharBufferCount > 0)
+	{
+		pCharBuffer = (PBTH_LE_GATT_CHARACTERISTIC)
+			malloc(expectedCharBufferCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+
+		if (NULL == pCharBuffer)
+		{
+			Util.handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * expectedCharBufferCount);
+		}
+		else
+		{
+			RtlZeroMemory(pCharBuffer,
+				expectedCharBufferCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
+		}
+
+		hr = BluetoothGATTGetCharacteristics(
+			_hBleDeviceHandle,
+			_pGattService,
+			expectedCharBufferCount,
+			pCharBuffer,
+			_pGattCharcteristicsCount,
+			BLUETOOTH_GATT_FLAG_NONE);
+
+		if (S_OK != hr)
+		{
+			stringstream msg;
+			msg << "Unable to determine the number of gatt characteristics. Reason: ["
+				<< Util.getLastError() << "]";
+
+			throw new ErrorMsg(msg.str());
+		}
+
+		if (*_pGattCharcteristicsCount != expectedCharBufferCount)
+		{
+			throw new ErrorMsg("characteristic count expected and characteristic count actual mismatch");
+		}
+	}
+
+	return pCharBuffer;
+}
+
+BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattService)
 {
 	pGattService = _pGattService;
+	hBleDevice = _hBleDevice;
+
+	pGattCharacteristics = getGattCharacteristics(hBleDevice, pGattService, &gattCharacteristicsCount);
+
+	for (size_t i = 0; i < gattCharacteristicsCount; i++)
+		gattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()
 {
+	//TODO delete gatt characteristics
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid()

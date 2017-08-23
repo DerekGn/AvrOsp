@@ -22,9 +22,17 @@
 
 #include "BleGattCharacteristic.hpp"
 
-BleGattCharacteristic::BleGattCharacteristic(PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
+PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, USHORT * _pGattDescriptorsCount)
+{
+	return PBTH_LE_GATT_DESCRIPTOR();
+}
+
+BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
 {
 	pGattCharacteristic = _pGattCharacteristic;
+	hBleDevice = _hBleDevice;
+
+
 }
 
 BleGattCharacteristic::~BleGattCharacteristic()

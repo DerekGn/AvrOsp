@@ -29,9 +29,9 @@
 
 #include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
+#include "Utility.hpp"
 
 #include <sstream>
-#include <iomanip>
 
 using namespace std;
 
@@ -67,7 +67,7 @@ HANDLE BleDevice::getBleDeviceHandle(__in GUID deviceInterfaceUUID)
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
 			<< guidToString(deviceInterfaceUUID) << "] Reason: ["
-			<< getLastError() << "]";
+			<< Util.getLastError() << "]";
 
 		throw new ErrorMsg(msg.str());
 	}
@@ -137,8 +137,8 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	if (ERROR_MORE_DATA != hr)
 	{
 		stringstream msg;
-		msg << "Unable to determine the number of device services. Reason: ["
-			<< getLastError() << "]";
+		msg << "Unable to determine the number of gatt services. Reason: ["
+			<< Util.getLastError() << "]";
 
 		throw new ErrorMsg(msg.str());
 	}
@@ -155,10 +155,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 
 	if (nullptr == _pGattServiceCount)
 	{
-		stringstream msg;
-		msg << "Unable to allocate [" << sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount << "]";
-
-		throw new ErrorMsg(msg.str());
+		Util.handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 	}
 	else
 		RtlZeroMemory(pServiceBuffer, sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
@@ -174,51 +171,13 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	if (S_OK != hr)
 	{
 		stringstream msg;
-		msg << "Unable to determine the number of device services. Reason: ["
-			<< getLastError() << "]";
+		msg << "Unable to determine the number of gatt services. Reason: ["
+			<< Util.getLastError() << "]";
 
 		throw new ErrorMsg(msg.str());
 	}
 
 	return pServiceBuffer;
-}
-
-PBTH_LE_GATT_CHARACTERISTIC BleDevice::getGattCharacteristics(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_SERVICE _pGattService, USHORT * _pGattCharcteristicsCount)
-{
-	return PBTH_LE_GATT_CHARACTERISTIC();
-}
-
-PBTH_LE_GATT_CHARACTERISTIC_VALUE BleDevice::getGattCharacteristicValue(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
-{
-	return PBTH_LE_GATT_CHARACTERISTIC_VALUE();
-}
-
-PBTH_LE_GATT_DESCRIPTOR BleDevice::getGattDescriptors(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, USHORT * _pGattDescriptorsCount)
-{
-	return PBTH_LE_GATT_DESCRIPTOR();
-}
-
-PBTH_LE_GATT_DESCRIPTOR_VALUE BleDevice::getGattDescriptorValue(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
-{
-	return PBTH_LE_GATT_DESCRIPTOR_VALUE();
-}
-
-string BleDevice::getLastError()
-{
-	DWORD errorMessageID = ::GetLastError();
-
-	if (errorMessageID == 0)
-		return string();
-
-	LPSTR messageBuffer = nullptr;
-	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
-
-	string message(messageBuffer, size);
-
-	LocalFree(messageBuffer);
-
-	return message;
 }
 
 BleDevice::BleDevice(GUID _deviceInterfaceUUID)
@@ -229,20 +188,9 @@ BleDevice::BleDevice(GUID _deviceInterfaceUUID)
 
 	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
 
-	USHORT gattCharacteristicCount;
-
 	for (size_t i = 0; i < gattServiceCount; i++)
 	{
-		gattCharacteristicCount = 0;
-		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristicsBuffer = getGattCharacteristics(hBleDevice, &pGattServiceBuffer[i], &gattCharacteristicCount);
-
-		USHORT gattDescriptorBufferCount;
-		for (size_t i = 0; i < gattCharacteristicCount; i++)
-		{
-
-			gattDescriptorBufferCount = 0;
-			PBTH_LE_GATT_DESCRIPTOR pGattDescriptorBuffer = getGattDescriptors(hBleDevice, &pGattCharacteristicsBuffer[i], &gattDescriptorBufferCount);
-		}
+		gattServices.push_back(new BleGattService(hBleDevice, &pGattServiceBuffer[i]));
 	}
 }
 

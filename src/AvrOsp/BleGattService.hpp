@@ -22,16 +22,32 @@
 #ifndef BLEGATTSERVICE_HPP
 #define BLEGATTSERVICE_HPP
 
+using namespace std;
+
 #include <Windows.h>
 #include <Bluetoothleapis.h>
+
+#include "BleGattCharacteristic.hpp"
+
+#include <list>
 
 class BleGattService
 {
 	private:
-		PBTH_LE_GATT_SERVICE pGattService;
+		HANDLE hBleDevice;
+				
+		USHORT gattCharacteristicsCount = 0;
+
+		PBTH_LE_GATT_SERVICE pGattService = nullptr;
+
+		list<BleGattCharacteristic*> gattCharacteristics;
+
+		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
+
+		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE pGattService, _Out_ USHORT * pGattCharcteristicsCount);
 
 	public:
-		BleGattService(HANDLE hbleDevice, PBTH_LE_GATT_SERVICE _pGattService);
+		BleGattService(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pGattService);
 
 		~BleGattService();
 

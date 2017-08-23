@@ -25,10 +25,14 @@
 class BleGattCharacteristic
 {
 	private:
+		HANDLE hBleDevice;
+
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
+		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, _Out_ USHORT * _pGattDescriptorsCount);
+
 	public:
-		BleGattCharacteristic(PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
+		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 
