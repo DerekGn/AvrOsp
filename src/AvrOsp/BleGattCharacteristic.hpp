@@ -2,7 +2,7 @@
 *
 *
 *
-* File              : BleCharacteristic.hpp
+* File              : BleGattCharacteristic.hpp
 * Compiler          : Dev-C++ 4.9.8.0 - http://bloodshed.net/dev/
 * Revision          : $Revision: 1164 $
 * Date              : $Date: 2017-08-16 00:00:00 +0200 (on, 02 aug 2006) $
@@ -22,15 +22,15 @@
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
-class BleCharacteristic
+class BleGattCharacteristic
 {
 	private:
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
 	public:
-		BleCharacteristic(PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
+		BleGattCharacteristic(PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
 		
-		~BleCharacteristic();
+		~BleGattCharacteristic();
 
 		USHORT getServiceHandle();
 

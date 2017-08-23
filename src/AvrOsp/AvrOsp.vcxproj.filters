@@ -54,13 +54,13 @@
     <ClInclude Include="BleSerialDeviceDescriptor.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BleCharacteristic.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="BleDevice.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BleService.hpp">
+    <ClInclude Include="BleGattService.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BleGattCharacteristic.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,10 +110,10 @@
     <ClCompile Include="BleDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BleService.cpp">
+    <ClCompile Include="BleGattService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BleCharacteristic.cpp">
+    <ClCompile Include="BleGattCharacteristic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

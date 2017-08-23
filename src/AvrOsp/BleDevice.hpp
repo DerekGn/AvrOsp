@@ -26,32 +26,44 @@ using namespace std;
 #include <Rpc.h>
 #include <bluetoothleapis.h>
 
-#include<string>
+#include <list>
+#include <string>
+
+#include "BleGattService.hpp"
 
 class BleDevice
 {
-	private:
-		
-		HANDLE hBleDevice = nullptr;
+private:
 
-		GUID deviceInterfaceUUID;
-		
-		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
+	HANDLE hBleDevice = nullptr;
 
-		static string getLastError();
+	GUID deviceInterfaceUUID;
 
-		static string guidToString(__in GUID _uuid);
+	USHORT gattServiceCount = 0;
 
-		static HANDLE getBleDeviceHandle(__in GUID _deviceInterfaceUUID);
+	PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 
-		static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE _deviceHandle, USHORT * _pServiceCount);
-		
-	public:
-		BleDevice(__in GUID _deviceInterfaceUUID);
-		
-		~BleDevice();
+	static string getLastError();
 
-		GUID getDeviceInterfaceUUID();
+	static string guidToString(__in GUID _uuid);
+
+	static HANDLE getBleDeviceHandle(__in GUID _deviceInterfaceUUID);
+
+	static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE _hBleDeviceHandle, _Out_ USHORT * _pGattServiceCount);
+
+	static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE _pGattService, _Out_ USHORT * _pGattCharcteristicsCount);
+
+	static PBTH_LE_GATT_CHARACTERISTIC_VALUE getGattCharacteristicValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
+
+	static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, _Out_ USHORT * _pGattDescriptorsCount);
+
+	static PBTH_LE_GATT_DESCRIPTOR_VALUE getGattDescriptorValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor);
+
+public:
+	BleDevice(GUID _deviceInterfaceUUID);
+
+	~BleDevice();
+
+	GUID getDeviceInterfaceUUID();
 };
 #endif
-

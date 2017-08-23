@@ -2,7 +2,7 @@
 *
 *
 *
-* File              : BleService.cpp
+* File              : BleService.hpp
 * Compiler          : Dev-C++ 4.9.8.0 - http://bloodshed.net/dev/
 * Revision          : $Revision: 1164 $
 * Date              : $Date: 2017-08-16 00:00:00 +0200 (on, 02 aug 2006) $
@@ -19,23 +19,25 @@
 *
 *
 ****************************************************************************/
-#include "BleService.hpp"
+#ifndef BLEGATTSERVICE_HPP
+#define BLEGATTSERVICE_HPP
 
-BleService::BleService(HANDLE hbleDevice, PBTH_LE_GATT_SERVICE _pGattService)
-{
-	pGattService = _pGattService;
-}
+#include <Windows.h>
+#include <Bluetoothleapis.h>
 
-BleService::~BleService()
+class BleGattService
 {
-}
+	private:
+		PBTH_LE_GATT_SERVICE pGattService;
 
-BTH_LE_UUID BleService::getServiceUuid()
-{
-	return pGattService->ServiceUuid;
-}
+	public:
+		BleGattService(HANDLE hbleDevice, PBTH_LE_GATT_SERVICE _pGattService);
 
-USHORT BleService::getServiceAttributeHandle()
-{
-	return pGattService->AttributeHandle;
-}
+		~BleGattService();
+
+		BTH_LE_UUID getServiceUuid();
+
+		USHORT getServiceAttributeHandle();
+};
+
+#endif
