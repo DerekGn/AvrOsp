@@ -22,12 +22,22 @@
 #ifndef BLESERVICE_HPP
 #define BLESERVICE_HPP
 
+#include <Windows.h>
+#include <Bluetoothleapis.h>
 
 class BleService
 {
+	private:
+		PBTH_LE_GATT_SERVICE pGattService;
+
 	public:
-		BleService(PBTH_LE_GATT_SERVICE pGattService);
+		BleService(HANDLE hbleDevice, PBTH_LE_GATT_SERVICE _pGattService);
+
 		~BleService();
+
+		BTH_LE_UUID getServiceUuid();
+
+		USHORT getServiceAttributeHandle();
 };
 
 #endif
