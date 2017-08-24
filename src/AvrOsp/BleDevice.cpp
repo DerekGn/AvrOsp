@@ -196,6 +196,9 @@ BleDevice::BleDevice(GUID _deviceInterfaceUUID)
 
 BleDevice::~BleDevice()
 {
+	for (BleGattService *s : gattServices)
+		delete(s);
+
 	if (pGattServiceBuffer != nullptr)
 		free(pGattServiceBuffer);
 

@@ -102,6 +102,9 @@ BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattSe
 
 BleGattService::~BleGattService()
 {
+	for (BleGattCharacteristic *c : gattCharacteristics)
+		delete(c);
+
 	if (pGattCharacteristics != nullptr)
 		free(pGattCharacteristics);
 }

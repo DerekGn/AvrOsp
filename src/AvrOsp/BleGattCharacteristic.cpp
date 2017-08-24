@@ -104,7 +104,11 @@ BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_SE
 
 BleGattCharacteristic::~BleGattCharacteristic()
 {
-	//todo cleanup gattdescriptors
+	for (BleGattDescriptor *d : gattDescriptors)
+		delete(d);
+
+	if (pGattDescriptors == nullptr)
+		free(pGattDescriptors);
 }
 
 USHORT BleGattCharacteristic::getServiceHandle()
