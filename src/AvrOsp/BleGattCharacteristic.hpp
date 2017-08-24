@@ -25,17 +25,29 @@
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+#include "BleGattDescriptor.hpp"
+
+using namespace std;
+
+#include <list>
+
 class BleGattCharacteristic
 {
 	private:
 		HANDLE hBleDevice;
 
+		USHORT gattDescriptorsCount = 0;
+
+		PBTH_LE_GATT_DESCRIPTOR pGattDescriptors = nullptr;
+
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
-		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, _Out_ USHORT * pGattDescriptorsCount);
+		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE pGattService, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, _Out_ USHORT * pGattDescriptorsCount);
+
+		list<BleGattDescriptor*> gattDescriptors;
 
 	public:
-		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE _pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 

@@ -134,7 +134,7 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 		_pGattServiceCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (ERROR_MORE_DATA != hr)
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt services. Reason: ["
@@ -196,11 +196,11 @@ BleDevice::BleDevice(GUID _deviceInterfaceUUID)
 
 BleDevice::~BleDevice()
 {
-	if (hBleDevice != nullptr)
-		CloseHandle(hBleDevice);
-
 	if (pGattServiceBuffer != nullptr)
 		free(pGattServiceBuffer);
+
+	if (hBleDevice != nullptr)
+		CloseHandle(hBleDevice);
 }
 
 GUID BleDevice::getDeviceInterfaceUUID()

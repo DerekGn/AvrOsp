@@ -19,24 +19,92 @@
 *
 *
 ****************************************************************************/
-
 #include "BleGattCharacteristic.hpp"
+#include "Utility.hpp"
 
-PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, USHORT * pGattDescriptorsCount)
+#include <sstream>
+
+using namespace std;
+
+PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDeviceHandle, PBTH_LE_GATT_SERVICE pGattService, 
+	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, USHORT * pGattDescriptorsCount)
 {
-	return PBTH_LE_GATT_DESCRIPTOR();
+	USHORT expectedDescriptorBufferCount;
+
+	HRESULT hr = BluetoothGATTGetDescriptors(
+		pGattService,
+		pGattCharacteristic,
+		0,
+		NULL,
+		&expectedDescriptorBufferCount,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
+	{
+		stringstream msg;
+		msg << "Unable to determine the number of gatt descriptors. Reason: ["
+			<< Util.getLastError() << "]";
+
+		throw new ErrorMsg(msg.str());
+	}
+	
+	PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer;
+
+	if (expectedDescriptorBufferCount > 0)
+	{
+		pDescriptorBuffer = (PBTH_LE_GATT_DESCRIPTOR)
+			malloc(expectedDescriptorBufferCount
+				* sizeof(BTH_LE_GATT_DESCRIPTOR));
+
+		if (NULL == pDescriptorBuffer)
+		{
+			Util.handleMallocFailure(sizeof(PBTH_LE_GATT_DESCRIPTOR) * expectedDescriptorBufferCount);
+		}
+		else
+		{
+			RtlZeroMemory(pDescriptorBuffer, expectedDescriptorBufferCount);
+		}
+
+		hr = BluetoothGATTGetDescriptors(
+			pGattService,
+			pGattCharacteristic,
+			expectedDescriptorBufferCount,
+			pDescriptorBuffer,
+			pGattDescriptorsCount,
+			BLUETOOTH_GATT_FLAG_NONE);
+
+		if (S_OK != hr) 
+		{
+			stringstream msg;
+			msg << "Unable to determine the number of gatt services. Reason: ["
+				<< Util.getLastError() << "]";
+
+			throw new ErrorMsg(msg.str());
+		}
+
+		if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
+			throw new ErrorMsg("descriptor count expected and descriptor count actual mismatch");
+		}
+	}
+
+	return pDescriptorBuffer;
 }
 
-BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
+BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattService, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
 {
 	pGattCharacteristic = _pGattCharacteristic;
 	hBleDevice = _hBleDevice;
 
+	gattDescriptorsCount = 0;
+	pGattDescriptors = getGattDescriptors(hBleDevice, _pGattService, pGattCharacteristic, &gattDescriptorsCount);
 
+	for (size_t i = 0; i < gattDescriptorsCount; i++)
+		gattDescriptors.push_back(new BleGattDescriptor(hBleDevice, &pGattDescriptors[i]));
 }
 
 BleGattCharacteristic::~BleGattCharacteristic()
 {
+	//todo cleanup gattdescriptors
 }
 
 USHORT BleGattCharacteristic::getServiceHandle()

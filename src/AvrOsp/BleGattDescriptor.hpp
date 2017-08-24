@@ -25,6 +25,10 @@
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+using namespace std;
+
+#include <list>
+
 class BleGattDescriptor
 {
 	private:

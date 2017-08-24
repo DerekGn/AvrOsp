@@ -33,33 +33,29 @@ using namespace std;
 
 class BleDevice
 {
-private:
+	private:
 
-	list<BleGattService*> gattServices;
+		list<BleGattService*> gattServices;
 
-	HANDLE hBleDevice = nullptr;
+		HANDLE hBleDevice = nullptr;
 
-	GUID deviceInterfaceUUID;
+		GUID deviceInterfaceUUID;
 
-	USHORT gattServiceCount = 0;
+		USHORT gattServiceCount = 0;
 
-	PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
+		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 	
-	static string guidToString(__in GUID uuid);
+		static string guidToString(__in GUID uuid);
 
-	static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
+		static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
 
-	static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE hBleDeviceHandle, _Out_ USHORT * pGattServiceCount);
-	
-	//static PBTH_LE_GATT_CHARACTERISTIC_VALUE getGattCharacteristicValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic);
+		static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE hBleDeviceHandle, _Out_ USHORT * pGattServiceCount);
 
-	//static PBTH_LE_GATT_DESCRIPTOR_VALUE getGattDescriptorValue(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor);
+	public:
+		BleDevice(GUID _deviceInterfaceUUID);
 
-public:
-	BleDevice(GUID _deviceInterfaceUUID);
+		~BleDevice();
 
-	~BleDevice();
-
-	GUID getDeviceInterfaceUUID();
+		GUID getDeviceInterfaceUUID();
 };
 #endif

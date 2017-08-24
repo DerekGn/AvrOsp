@@ -60,10 +60,8 @@ class BleSerialDevice : public CommChannel
 		BleSerialDeviceDescriptor bleSerialDeviceDescriptor;
 
 		static HANDLE GetBleHandle(__in GUID deviceServiceGuid);
+
 		static PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice, USHORT* pGattServicesCount);
-		static PBTH_LE_GATT_CHARACTERISTIC GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, USHORT* pGattCharacteristicsCount);
-		static PBTH_LE_GATT_DESCRIPTOR GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, USHORT gattCharacteristicsCount, USHORT* pGattDescriptorCount, list<DescriptorValues> descriptorValues);
-		static PBTH_LE_GATT_DESCRIPTOR_VALUE GetBleDeviceDescriptorValues(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer);
 
 	public:
 		BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor);

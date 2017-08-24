@@ -122,71 +122,6 @@ PBTH_LE_GATT_SERVICE BleSerialDevice::GetBleDeviceServices(HANDLE hBleDevice, US
 	return pServiceBuffer;
 }
 
-PBTH_LE_GATT_CHARACTERISTIC BleSerialDevice::GetBleDeviceCharacteristics(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pServicesBuffer, 
-	USHORT* pGattCharacteristicsCount)
-{
-	char buffer[50];
-
-	HRESULT hr = BluetoothGATTGetCharacteristics(
-		hBleDevice,
-		pServicesBuffer,
-		0,
-		NULL,
-		pGattCharacteristicsCount,
-		BLUETOOTH_GATT_FLAG_NONE);
-
-	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) {
-		sprintf_s(buffer, "BluetoothGATTGetCharacteristics - Buffer Size 0x%x", hr);
-		throw new ErrorMsg(buffer);
-	}	
-	
-	PBTH_LE_GATT_CHARACTERISTIC pCharBuffer;
-	if (pGattCharacteristicsCount > 0) {
-		pCharBuffer = (PBTH_LE_GATT_CHARACTERISTIC)
-			malloc(*pGattCharacteristicsCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
-
-		if (NULL == pCharBuffer)
-			throw new ErrorMsg("pCharBuffer out of memory");
-		else
-			RtlZeroMemory(pCharBuffer,
-				*pGattCharacteristicsCount * sizeof(BTH_LE_GATT_CHARACTERISTIC));
-	
-		////////////////////////////////////////////////////////////////////////////
-		// Retrieve Characteristics
-		////////////////////////////////////////////////////////////////////////////
-		USHORT numChars;
-		hr = BluetoothGATTGetCharacteristics(
-			hBleDevice,
-			pServicesBuffer,
-			*pGattCharacteristicsCount,
-			pCharBuffer,
-			&numChars,
-			BLUETOOTH_GATT_FLAG_NONE);
-
-		if (S_OK != hr) {
-			sprintf_s(buffer, "BluetoothGATTGetCharacteristics - Actual Data 0x%X", hr);
-			throw new ErrorMsg(buffer);
-		}
-
-		if (numChars != *pGattCharacteristicsCount)
-			throw new ErrorMsg("buffer size and buffer size actual size mismatch");
-	}
-
-	return pCharBuffer;
-}
-
-PBTH_LE_GATT_DESCRIPTOR BleSerialDevice::GetBleDeviceDescriptors(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer, 
-	USHORT gattCharacteristicsCount, USHORT * pGattDescriptorCount, list<DescriptorValues> descriptorValues)
-{
-
-	return PBTH_LE_GATT_DESCRIPTOR();
-}
-
-PBTH_LE_GATT_DESCRIPTOR_VALUE BleSerialDevice::GetBleDeviceDescriptorValues(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer)
-{
-	return PBTH_LE_GATT_DESCRIPTOR_VALUE();
-}
-
 //BleSerialDevice::BleSerialDevice(GUID bleDeviceInterfaceId)
 //{
 //	/*if (deviceServiceUUID.length() == 0)
@@ -214,11 +149,11 @@ BleSerialDevice::~BleSerialDevice()
 
 void BleSerialDevice::openChannel()
 {
-	hBleDevice = GetBleHandle(deviceServiceGuid);
+	/*hBleDevice = GetBleHandle(deviceServiceGuid);
 
 	pServicesBuffer = GetBleDeviceServices(hBleDevice, &gattServiceCount);
 
-	pCharacteristicsBuffer = GetBleDeviceCharacteristics(hBleDevice, pServicesBuffer, &gattCharacteristicCount);
+	pCharacteristicsBuffer = GetBleDeviceCharacteristics(hBleDevice, pServicesBuffer, &gattCharacteristicCount);*/
 }
 
 void BleSerialDevice::closeChannel()

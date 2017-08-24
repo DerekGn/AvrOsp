@@ -38,7 +38,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 		&expectedCharBufferCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (ERROR_MORE_DATA != hr)
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 	{
 		stringstream msg;
 		msg << "Unable to determine the number of gatt characteristics. Reason: ["
@@ -97,12 +97,13 @@ BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattSe
 	pGattCharacteristics = getGattCharacteristics(hBleDevice, pGattService, &gattCharacteristicsCount);
 
 	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		gattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, &pGattCharacteristics[i]));
+		gattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, pGattService, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()
 {
-	//TODO delete gatt characteristics
+	if (pGattCharacteristics != nullptr)
+		free(pGattCharacteristics);
 }
 
 BTH_LE_UUID BleGattService::getServiceUuid()
