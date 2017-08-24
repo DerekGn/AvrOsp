@@ -178,6 +178,19 @@ void Utility::handleMallocFailure(unsigned long size)
 	throw new ErrorMsg(msg.str());
 }
 
+string Utility::guidToString(GUID uuid)
+{
+	string guid;
+	RPC_CSTR szUuid = NULL;
+	if (::UuidToStringA(&uuid, &szUuid) == RPC_S_OK)
+	{
+		guid = (char*)szUuid;
+		::RpcStringFreeA(&szUuid);
+	}
+
+	return guid;
+}
+
 #ifndef NOREGISTRY
 string Utility::getRegistryValue( const string & path, const string & value )
 {

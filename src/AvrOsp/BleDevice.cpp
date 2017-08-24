@@ -34,20 +34,6 @@
 
 using namespace std;
 
-string BleDevice::guidToString(GUID uuid)
-{
-	string guid;
-
-	RPC_WSTR szUuid = NULL;
-	if (UuidToString(&uuid, &szUuid) == RPC_S_OK)
-	{
-		guid = (char*)szUuid;
-		RpcStringFree(&szUuid);
-	}
-
-	return string();
-}
-
 // This function works to get a handle for a BLE device based on its GUID
 // Copied from http://social.msdn.microsoft.com/Forums/windowshardware/en-US/e5e1058d-5a64-4e60-b8e2-0ce327c13058/erroraccessdenied-error-when-trying-to-receive-data-from-bluetooth-low-energy-devices?forum=wdk
 // From https://social.msdn.microsoft.com/Forums/windowsdesktop/en-US/bad452cb-4fc2-4a86-9b60-070b43577cc9/is-there-a-simple-example-desktop-programming-c-for-bluetooth-low-energy-devices?forum=wdk
@@ -65,7 +51,7 @@ HANDLE BleDevice::getBleDeviceHandle(__in GUID deviceInterfaceUUID)
 	{
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
-			<< guidToString(deviceInterfaceUUID) << "] Reason: ["
+			<< Util.guidToString(deviceInterfaceUUID) << "] Reason: ["
 			<< Util.getLastError() << "]";
 
 		throw new ErrorMsg(msg.str());
@@ -116,7 +102,7 @@ HANDLE BleDevice::getBleDeviceHandle(__in GUID deviceInterfaceUUID)
 	{
 		stringstream msg;
 		msg << "Device interface UUID: ["
-			<< guidToString(deviceInterfaceUUID) << "] not found";
+			<< Util.guidToString(deviceInterfaceUUID) << "] not found";
 
 		throw new ErrorMsg(msg.str());
 	}

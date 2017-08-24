@@ -45,8 +45,6 @@ class BleDevice
 
 		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 	
-		static string guidToString(__in GUID uuid);
-
 		static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
 
 		static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE hBleDeviceHandle, _Out_ USHORT * pGattServiceCount);

@@ -28,6 +28,8 @@ using namespace std;
 #include <windows.h>
 #endif
 
+#include <Rpc.h>
+
 #include <vector>
 #include <string>
 #include "ErrorMsg.hpp"
@@ -62,6 +64,8 @@ class Utility
 		string getLastError();
 
 		void handleMallocFailure(unsigned long size);
+
+		static string guidToString(GUID uuid);
 
 #ifndef NOREGISTRY	
 		string getRegistryValue( const string & path, const string & value );
