@@ -19,49 +19,23 @@
 *
 *
 ****************************************************************************/
-#ifndef BLEDEVICE_HPP
-#define BLEDEVICE_HPP
+#ifndef BLESERIALDEVICE_HPP
+#define BLESERIALDEVICE_HPP
 
 using namespace std;
 
-//#define WIN32_LEAN_AND_MEAN
-
-#include <windows.h>
-#include <setupapi.h>
-#include <devguid.h>
-#include <regstr.h>
-#include <bthdef.h>
-#include <Bluetoothleapis.h>
-#pragma comment(lib, "SetupAPI")
-#pragma comment(lib, "BluetoothApis.lib")
-
-#include <tuple>
-#include <list>
-
 #include "BleSerialDeviceDescriptor.hpp"
 #include "CommChannel.hpp"
+#include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
 
 class BleSerialDevice : public CommChannel
 {
-	typedef tuple<USHORT, PBTH_LE_GATT_DESCRIPTOR_VALUE> DescriptorValues;
-
 	private:
-		HANDLE hBleDevice = NULL;
-		GUID deviceServiceGuid;
-		USHORT gattServiceCount = 0;
-		USHORT gattDescriptorCount = 0;
-		USHORT gattCharacteristicCount = 0;
-		list<DescriptorValues> descriptorValues;
-		PBTH_LE_GATT_SERVICE pServicesBuffer = NULL;
-		PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer = NULL;
-		PBTH_LE_GATT_CHARACTERISTIC pCharacteristicsBuffer = NULL;
 		
+		BleDevice * pBleDevice = nullptr;
+
 		BleSerialDeviceDescriptor bleSerialDeviceDescriptor;
-
-		static HANDLE GetBleHandle(__in GUID deviceServiceGuid);
-
-		static PBTH_LE_GATT_SERVICE GetBleDeviceServices(HANDLE hBleDevice, USHORT* pGattServicesCount);
 
 	public:
 		BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor);
