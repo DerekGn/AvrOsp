@@ -24,25 +24,15 @@
 
 using namespace std;
 
-BleSerialDeviceDescriptor::BleSerialDeviceDescriptor()
-{
-}
-
-BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceUUID, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
+BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
 {
 	bleSerialDeviceType = _bleSerialDeviceType;
-	bleDeviceInterfaceUUID = _bleDeviceInterfaceUUID;
 	serialInCharacteristicUUID = _serialInCharacteristicUUID;
 	serialOutCharacteristicUUID = _serialOutCharacteristicUUID;
 }
 
 BleSerialDeviceDescriptor::~BleSerialDeviceDescriptor()
 {
-}
-
-GUID BleSerialDeviceDescriptor::getBleDeviceInterfaceUUID()
-{
-	return bleDeviceInterfaceUUID;
 }
 
 GUID BleSerialDeviceDescriptor::getSerialInCharacteristicUUID()

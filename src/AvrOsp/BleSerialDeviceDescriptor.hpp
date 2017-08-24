@@ -31,14 +31,12 @@ class BleSerialDeviceDescriptor
 {
 	private:
 		string bleSerialDeviceType;			// The ble serial device type
-		GUID bleDeviceInterfaceUUID;		// The ble device interface used to create a handle to the device
 		GUID serialInCharacteristicUUID;	// The characteristic for serial in data
 		GUID serialOutCharacteristicUUID;	// The characteristic for serial out data
 
 	public:
-		BleSerialDeviceDescriptor();
 
-		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _bleDeviceInterfaceUUID, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
+		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
 		
 		~BleSerialDeviceDescriptor();
 

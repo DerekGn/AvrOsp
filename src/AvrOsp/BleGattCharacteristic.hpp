@@ -26,6 +26,7 @@
 #include <Bluetoothleapis.h>
 
 #include "BleGattDescriptor.hpp"
+#include "BleGattCharacteristicValue.hpp"
 
 using namespace std;
 
@@ -42,12 +43,13 @@ class BleGattCharacteristic
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
-		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE pGattService, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, _Out_ USHORT * pGattDescriptorsCount);
+		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic,
+			_Out_ USHORT * pGattDescriptorsCount);
 
 		list<BleGattDescriptor*> gattDescriptors;
 
 	public:
-		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE _pGattService, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 
@@ -74,5 +76,7 @@ class BleGattCharacteristic
 		BOOLEAN getIsIndicatable();
 
 		BOOLEAN getHasExtendedProperties();
+
+		BleGattCharacteristicValue getValue();
 };
 #endif

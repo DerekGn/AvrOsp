@@ -24,79 +24,81 @@
 
 #include <sstream>
 
-using namespace std;
-
-PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDeviceHandle, PBTH_LE_GATT_SERVICE pGattService, 
+PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDeviceHandle,
 	PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, USHORT * pGattDescriptorsCount)
 {
-	USHORT expectedDescriptorBufferCount;
+	PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer = nullptr;
+	USHORT expectedDescriptorBufferCount = 0;
+	*pGattDescriptorsCount = 0;
 
 	HRESULT hr = BluetoothGATTGetDescriptors(
-		pGattService,
+		hBleDeviceHandle,
 		pGattCharacteristic,
 		0,
 		NULL,
 		&expectedDescriptorBufferCount,
 		BLUETOOTH_GATT_FLAG_NONE);
 
-	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
+	if (HRESULT_FROM_WIN32(ERROR_NOT_FOUND) != hr)
 	{
-		stringstream msg;
-		msg << "Unable to determine the number of gatt descriptors. Reason: ["
-			<< Util.getLastError() << "]";
-
-		throw new ErrorMsg(msg.str());
-	}
-	
-	PBTH_LE_GATT_DESCRIPTOR pDescriptorBuffer;
-
-	if (expectedDescriptorBufferCount > 0)
-	{
-		pDescriptorBuffer = (PBTH_LE_GATT_DESCRIPTOR)
-			malloc(expectedDescriptorBufferCount
-				* sizeof(BTH_LE_GATT_DESCRIPTOR));
-
-		if (NULL == pDescriptorBuffer)
-		{
-			Util.handleMallocFailure(sizeof(PBTH_LE_GATT_DESCRIPTOR) * expectedDescriptorBufferCount);
-		}
-		else
-		{
-			RtlZeroMemory(pDescriptorBuffer, expectedDescriptorBufferCount);
-		}
-
-		hr = BluetoothGATTGetDescriptors(
-			pGattService,
-			pGattCharacteristic,
-			expectedDescriptorBufferCount,
-			pDescriptorBuffer,
-			pGattDescriptorsCount,
-			BLUETOOTH_GATT_FLAG_NONE);
-
-		if (S_OK != hr) 
+		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
 		{
 			stringstream msg;
-			msg << "Unable to determine the number of gatt services. Reason: ["
+			msg << "Unable to determine the number of gatt descriptors. Reason: ["
 				<< Util.getLastError() << "]";
 
 			throw new ErrorMsg(msg.str());
 		}
+		
+		if (expectedDescriptorBufferCount > 0)
+		{
+			pDescriptorBuffer = (PBTH_LE_GATT_DESCRIPTOR)
+				malloc(expectedDescriptorBufferCount
+					* sizeof(BTH_LE_GATT_DESCRIPTOR));
 
-		if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
-			throw new ErrorMsg("descriptor count expected and descriptor count actual mismatch");
+			if (NULL == pDescriptorBuffer)
+			{
+				Util.handleMallocFailure(sizeof(PBTH_LE_GATT_DESCRIPTOR) * expectedDescriptorBufferCount);
+			}
+			else
+			{
+				RtlZeroMemory(pDescriptorBuffer, expectedDescriptorBufferCount);
+			}
+
+			hr = BluetoothGATTGetDescriptors(
+				hBleDeviceHandle,
+				pGattCharacteristic,
+				expectedDescriptorBufferCount,
+				pDescriptorBuffer,
+				pGattDescriptorsCount,
+				BLUETOOTH_GATT_FLAG_NONE);
+
+			if (S_OK != hr)
+			{
+				stringstream msg;
+				msg << "Unable to determine the number of gatt services. Reason: ["
+					<< Util.getLastError() << "]";
+
+				throw new ErrorMsg(msg.str());
+			}
+
+			if (*pGattDescriptorsCount != expectedDescriptorBufferCount) {
+				throw new ErrorMsg("descriptor count expected and descriptor count actual mismatch");
+			}
 		}
 	}
+	
 
 	return pDescriptorBuffer;
 }
 
-BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattService, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
+BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
 {
 	pGattCharacteristic = _pGattCharacteristic;
 	hBleDevice = _hBleDevice;
 
 	gattDescriptorsCount = 0;
-	pGattDescriptors = getGattDescriptors(hBleDevice, _pGattService, pGattCharacteristic, &gattDescriptorsCount);
+	pGattDescriptors = getGattDescriptors(hBleDevice, pGattCharacteristic, &gattDescriptorsCount);
 
 	for (size_t i = 0; i < gattDescriptorsCount; i++)
 		gattDescriptors.push_back(new BleGattDescriptor(hBleDevice, &pGattDescriptors[i]));
@@ -169,4 +171,65 @@ BOOLEAN BleGattCharacteristic::getIsIndicatable()
 BOOLEAN BleGattCharacteristic::getHasExtendedProperties()
 {
 	return pGattCharacteristic->HasExtendedProperties;
+}
+
+BleGattCharacteristicValue BleGattCharacteristic::getValue()
+{
+	PBTH_LE_GATT_CHARACTERISTIC_VALUE pCharValueBuffer = nullptr;
+	USHORT charValueDataSize = 0;
+
+	if (pGattCharacteristic->IsReadable) 
+	{
+		HRESULT hr = BluetoothGATTGetCharacteristicValue(
+			hBleDevice,
+			pGattCharacteristic,
+			0,
+			NULL,
+			&charValueDataSize,
+			BLUETOOTH_GATT_FLAG_NONE);
+
+		if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr) 
+		{
+			stringstream msg;
+			msg << "Unable to determine the characeristic value size. Reason: ["
+				<< Util.getLastError() << "]";
+
+			throw new ErrorMsg(msg.str());
+		}
+
+		pCharValueBuffer = (PBTH_LE_GATT_CHARACTERISTIC_VALUE)malloc(charValueDataSize);
+
+		if (NULL == pCharValueBuffer) 
+		{
+			Util.handleMallocFailure(charValueDataSize);
+		}
+		else 
+		{
+			RtlZeroMemory(pCharValueBuffer, charValueDataSize);
+		}
+
+
+		hr = BluetoothGATTGetCharacteristicValue(
+			hBleDevice,
+			pGattCharacteristic,
+			(ULONG)charValueDataSize,
+			pCharValueBuffer,
+			NULL,
+			BLUETOOTH_GATT_FLAG_NONE);
+
+		if (S_OK != hr)
+		{
+			stringstream msg;
+			msg << "Unable to read the characeristic value. Reason: ["
+				<< Util.getLastError() << "]";
+
+			throw new ErrorMsg(msg.str());
+		}
+	}
+	else
+	{
+		throw new ErrorMsg("characteristic is not readable");
+	}
+
+	return BleGattCharacteristicValue(pCharValueBuffer);
 }

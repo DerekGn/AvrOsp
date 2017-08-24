@@ -166,7 +166,7 @@ string Utility::getLastError()
 
 	LocalFree(messageBuffer);
 
-	return message;
+	return message.replace(message.end() - 3, message.end(), "");
 }
 
 
