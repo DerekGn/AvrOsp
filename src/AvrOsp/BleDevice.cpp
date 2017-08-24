@@ -26,7 +26,6 @@
 #pragma comment(lib, "SetupAPI")
 #pragma comment(lib, "BluetoothAPIs")
 
-
 #include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
@@ -190,13 +189,13 @@ BleDevice::BleDevice(GUID _deviceInterfaceUUID)
 
 	for (size_t i = 0; i < gattServiceCount; i++)
 	{
-		gattServices.push_back(new BleGattService(hBleDevice, &pGattServiceBuffer[i]));
+		bleGattServices.push_back(new BleGattService(hBleDevice, &pGattServiceBuffer[i]));
 	}
 }
 
 BleDevice::~BleDevice()
 {
-	for (BleGattService *s : gattServices)
+	for (BleGattService *s : bleGattServices)
 		delete(s);
 
 	if (pGattServiceBuffer != nullptr)
@@ -209,4 +208,9 @@ BleDevice::~BleDevice()
 GUID BleDevice::getDeviceInterfaceUUID()
 {
 	return deviceInterfaceUUID;
+}
+
+const BleDevice::BleGattServices & BleDevice::getBleGattServices()
+{
+	return bleGattServices;
 }

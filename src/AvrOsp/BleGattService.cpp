@@ -27,7 +27,8 @@
 
 using namespace std;
 
-PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDeviceHandle, PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount)
+PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDeviceHandle, 
+	PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount)
 {
 	USHORT expectedCharBufferCount;
 	HRESULT hr = BluetoothGATTGetCharacteristics(
@@ -97,12 +98,12 @@ BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattSe
 	pGattCharacteristics = getGattCharacteristics(hBleDevice, pGattService, &gattCharacteristicsCount);
 
 	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		gattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, pGattService, &pGattCharacteristics[i]));
+		bleGattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, pGattService, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()
 {
-	for (BleGattCharacteristic *c : gattCharacteristics)
+	for (BleGattCharacteristic *c : bleGattCharacteristics)
 		delete(c);
 
 	if (pGattCharacteristics != nullptr)
@@ -117,4 +118,9 @@ BTH_LE_UUID BleGattService::getServiceUuid()
 USHORT BleGattService::getServiceAttributeHandle()
 {
 	return pGattService->AttributeHandle;
+}
+
+const BleGattService::BleGattCharacteristics & BleGattService::getBleCharacteristics()
+{
+	return bleGattCharacteristics;
 }

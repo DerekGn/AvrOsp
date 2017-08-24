@@ -40,7 +40,7 @@ class BleGattService
 
 		PBTH_LE_GATT_SERVICE pGattService = nullptr;
 
-		list<BleGattCharacteristic*> gattCharacteristics;
+		list<BleGattCharacteristic*> bleGattCharacteristics;
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
 
@@ -54,6 +54,10 @@ class BleGattService
 		BTH_LE_UUID getServiceUuid();
 
 		USHORT getServiceAttributeHandle();
+
+		typedef std::list<BleGattCharacteristic*> BleGattCharacteristics;
+
+		const BleGattCharacteristics& getBleCharacteristics();
 };
 
 #endif

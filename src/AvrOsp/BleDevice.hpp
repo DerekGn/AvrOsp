@@ -35,7 +35,7 @@ class BleDevice
 {
 	private:
 
-		list<BleGattService*> gattServices;
+		list<BleGattService*> bleGattServices;
 
 		HANDLE hBleDevice = nullptr;
 
@@ -57,5 +57,9 @@ class BleDevice
 		~BleDevice();
 
 		GUID getDeviceInterfaceUUID();
+
+		typedef std::list<BleGattService*> BleGattServices;
+
+		const BleGattServices& getBleGattServices();
 };
 #endif
