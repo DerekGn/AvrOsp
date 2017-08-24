@@ -27,12 +27,12 @@
 
 using namespace std;
 
-PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE _hBleDeviceHandle, PBTH_LE_GATT_SERVICE _pGattService, USHORT * _pGattCharcteristicsCount)
+PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDeviceHandle, PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount)
 {
 	USHORT expectedCharBufferCount;
 	HRESULT hr = BluetoothGATTGetCharacteristics(
-		_hBleDeviceHandle,
-		_pGattService,
+		hBleDeviceHandle,
+		pGattService,
 		0,
 		NULL,
 		&expectedCharBufferCount,
@@ -64,11 +64,11 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE _hBleD
 		}
 
 		hr = BluetoothGATTGetCharacteristics(
-			_hBleDeviceHandle,
-			_pGattService,
+			hBleDeviceHandle,
+			pGattService,
 			expectedCharBufferCount,
 			pCharBuffer,
-			_pGattCharcteristicsCount,
+			pGattCharcteristicsCount,
 			BLUETOOTH_GATT_FLAG_NONE);
 
 		if (S_OK != hr)
@@ -80,7 +80,7 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE _hBleD
 			throw new ErrorMsg(msg.str());
 		}
 
-		if (*_pGattCharcteristicsCount != expectedCharBufferCount)
+		if (*pGattCharcteristicsCount != expectedCharBufferCount)
 		{
 			throw new ErrorMsg("characteristic count expected and characteristic count actual mismatch");
 		}

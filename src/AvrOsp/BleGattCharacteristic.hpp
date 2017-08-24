@@ -19,6 +19,9 @@
 *
 *
 ****************************************************************************/
+#ifndef BLEGATTCHARACTERISTIC_HPP
+#define BLEGATTCHARACTERISTIC_HPP
+
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
@@ -29,7 +32,7 @@ class BleGattCharacteristic
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
-		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE _hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic, _Out_ USHORT * _pGattDescriptorsCount);
+		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic, _Out_ USHORT * pGattDescriptorsCount);
 
 	public:
 		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
@@ -60,4 +63,4 @@ class BleGattCharacteristic
 
 		BOOLEAN getHasExtendedProperties();
 };
-
+#endif

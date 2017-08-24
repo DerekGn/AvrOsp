@@ -19,16 +19,22 @@
 *
 *
 ****************************************************************************/
+#ifndef BLEGATTDESCRIPTOR_HPP
+#define BLEGATTDESCRIPTOR_HPP
 
-#include "BleGattDescriptor.hpp"
+#include <Windows.h>
+#include <Bluetoothleapis.h>
 
-
-BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
+class BleGattDescriptor
 {
-	hBleDevice = _hBleDevice;
-	pGattDescriptor = _pGattDescriptor;
-}
+	private:
+		HANDLE hBleDevice;
+		
+		PBTH_LE_GATT_DESCRIPTOR pGattDescriptor;
 
-BleGattDescriptor::~BleGattDescriptor()
-{
-}
+	public:
+		BleGattDescriptor(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
+
+		~BleGattDescriptor();
+};
+#endif
