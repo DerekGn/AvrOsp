@@ -32,3 +32,28 @@ BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR
 BleGattDescriptor::~BleGattDescriptor()
 {
 }
+
+USHORT BleGattDescriptor::getServiceHandle()
+{
+	return pGattDescriptor->ServiceHandle;
+}
+
+USHORT BleGattDescriptor::getCharacteristicHandle()
+{
+	return pGattDescriptor->CharacteristicHandle;
+}
+
+BTH_LE_GATT_DESCRIPTOR_TYPE BleGattDescriptor::getDescriptorType()
+{
+	return pGattDescriptor->DescriptorType;
+}
+
+BTH_LE_UUID BleGattDescriptor::getDescriptorUuid()
+{
+	return pGattDescriptor->DescriptorUuid;
+}
+
+USHORT BleGattDescriptor::getAttributeHandle()
+{
+	return pGattDescriptor->AttributeHandle;
+}

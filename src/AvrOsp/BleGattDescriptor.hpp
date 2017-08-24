@@ -36,5 +36,15 @@ class BleGattDescriptor
 		BleGattDescriptor(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
 		~BleGattDescriptor();
+
+		USHORT getServiceHandle();
+
+		USHORT getCharacteristicHandle();
+
+		BTH_LE_GATT_DESCRIPTOR_TYPE getDescriptorType();
+
+		BTH_LE_UUID getDescriptorUuid();
+		
+		USHORT getAttributeHandle();
 };
 #endif
