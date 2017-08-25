@@ -2,7 +2,7 @@
 *
 *
 *
-* File              : BleGattDescriptor.hpp
+* File              : BleGattDescriptor.cpp
 * Compiler          : Dev-C++ 4.9.8.0 - http://bloodshed.net/dev/
 * Revision          : $Revision: 1164 $
 * Date              : $Date: 2017-08-16 00:00:00 +0200 (on, 02 aug 2006) $
@@ -21,7 +21,11 @@
 ****************************************************************************/
 
 #include "BleGattDescriptor.hpp"
+#include "Utility.hpp"
 
+#include <sstream>
+
+using namespace std;
 
 BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
 {
@@ -31,6 +35,7 @@ BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR
 
 BleGattDescriptor::~BleGattDescriptor()
 {
+
 }
 
 USHORT BleGattDescriptor::getServiceHandle()
@@ -56,4 +61,56 @@ BTH_LE_UUID BleGattDescriptor::getDescriptorUuid()
 USHORT BleGattDescriptor::getAttributeHandle()
 {
 	return pGattDescriptor->AttributeHandle;
+}
+
+BleGattDescriptorValue* BleGattDescriptor::getValue()
+{
+	USHORT descValueDataSize;
+
+	HRESULT hr = BluetoothGATTGetDescriptorValue(
+		hBleDevice,
+		pGattDescriptor,
+		0,
+		NULL,
+		&descValueDataSize,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (HRESULT_FROM_WIN32(ERROR_MORE_DATA) != hr)
+	{
+		stringstream msg;
+		msg << "Unable to determine the descriptor value size. Reason: ["
+			<< Util.getLastError() << "]";
+
+		throw new ErrorMsg(msg.str());
+	}
+
+	PBTH_LE_GATT_DESCRIPTOR_VALUE pDescValueBuffer = (PBTH_LE_GATT_DESCRIPTOR_VALUE)malloc(descValueDataSize);
+
+	if (NULL == pDescValueBuffer)
+	{
+		Util.handleMallocFailure(descValueDataSize);
+	}
+	else
+	{
+		RtlZeroMemory(pDescValueBuffer, descValueDataSize);
+	}
+
+	hr = BluetoothGATTGetDescriptorValue(
+		hBleDevice,
+		pGattDescriptor,
+		(ULONG)descValueDataSize,
+		pDescValueBuffer,
+		NULL,
+		BLUETOOTH_GATT_FLAG_NONE);
+
+	if (S_OK != hr)
+	{
+		stringstream msg;
+		msg << "Unable to read the descriptor value size. Reason: ["
+			<< Util.getLastError() << "]";
+
+		throw new ErrorMsg(msg.str());
+	}
+	
+	return new BleGattDescriptorValue(pDescValueBuffer);
 }
