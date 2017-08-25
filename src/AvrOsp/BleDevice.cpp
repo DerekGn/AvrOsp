@@ -2,7 +2,7 @@
 *
 *
 *
-* File              : BleSerialDevice.hpp
+* File              : BleSerialDevice.cpp
 * Compiler          : Dev-C++ 4.9.8.0 - http://bloodshed.net/dev/
 * Revision          : $Revision: 1164 $
 * Date              : $Date: 2017-08-16 00:00:00 +0200 (on, 02 aug 2006) $

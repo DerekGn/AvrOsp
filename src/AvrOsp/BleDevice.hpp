@@ -56,7 +56,7 @@ class BleDevice
 
 		GUID getDeviceInterfaceUUID();
 
-		typedef std::list<BleGattService*> BleGattServices;
+		typedef list<BleGattService*> BleGattServices;
 
 		const BleGattServices& getBleGattServices();
 };
