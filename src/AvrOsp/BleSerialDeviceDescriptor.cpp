@@ -24,6 +24,10 @@
 
 using namespace std;
 
+BleSerialDeviceDescriptor::BleSerialDeviceDescriptor()
+{
+}
+
 BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
 {
 	bleSerialDeviceType = _bleSerialDeviceType;
@@ -33,6 +37,11 @@ BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType
 
 BleSerialDeviceDescriptor::~BleSerialDeviceDescriptor()
 {
+}
+
+GUID BleSerialDeviceDescriptor::getBleDeviceInterfaceUUID()
+{
+	return GUID();
 }
 
 GUID BleSerialDeviceDescriptor::getSerialInCharacteristicUUID()
