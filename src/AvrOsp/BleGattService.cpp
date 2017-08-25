@@ -110,7 +110,7 @@ BleGattService::~BleGattService()
 	for (BleGattCharacteristic *c : bleGattCharacteristics)
 		delete(c);
 
-	if (pGattCharacteristics != nullptr)
+	if (pGattCharacteristics)
 		free(pGattCharacteristics);
 }
 

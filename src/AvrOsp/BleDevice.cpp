@@ -184,10 +184,10 @@ BleDevice::~BleDevice()
 	for (BleGattService *s : bleGattServices)
 		delete(s);
 
-	if (pGattServiceBuffer != nullptr)
+	if (pGattServiceBuffer)
 		free(pGattServiceBuffer);
 
-	if (hBleDevice != nullptr)
+	if (hBleDevice)
 		CloseHandle(hBleDevice);
 }
 

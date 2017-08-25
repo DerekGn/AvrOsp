@@ -32,16 +32,16 @@ BleGattCharacteristicValue::BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERIST
 
 BleGattCharacteristicValue::~BleGattCharacteristicValue()
 {
-	if(pGattCharacteristicValue != nullptr)
+	if(pGattCharacteristicValue)
 		free(pGattCharacteristicValue);
 }
 
 unsigned long BleGattCharacteristicValue::getDataSize()
 {
-	return pGattCharacteristicValue != nullptr ? pGattCharacteristicValue->DataSize : 0;
+	return pGattCharacteristicValue ? pGattCharacteristicValue->DataSize : 0;
 }
 
 unsigned char* BleGattCharacteristicValue::getData()
 {
-	return pGattCharacteristicValue != nullptr ? pGattCharacteristicValue->Data : nullptr;
+	return pGattCharacteristicValue ? pGattCharacteristicValue->Data : nullptr;
 }

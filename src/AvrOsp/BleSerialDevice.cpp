@@ -31,7 +31,7 @@ BleSerialDevice::BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescr
 
 BleSerialDevice::~BleSerialDevice()
 {
-	if (pBleDevice != nullptr)
+	if (pBleDevice)
 		delete(pBleDevice);
 }
 
