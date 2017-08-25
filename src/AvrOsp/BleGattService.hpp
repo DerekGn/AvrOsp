@@ -34,7 +34,7 @@ using namespace std;
 class BleGattService
 {
 	private:
-		HANDLE hBleDevice;
+		HANDLE hBleDevice = nullptr;
 				
 		USHORT gattCharacteristicsCount = 0;
 
@@ -55,7 +55,7 @@ class BleGattService
 
 		USHORT getServiceAttributeHandle();
 
-		typedef std::list<BleGattCharacteristic*> BleGattCharacteristics;
+		typedef list<BleGattCharacteristic*> BleGattCharacteristics;
 
 		const BleGattCharacteristics& getBleCharacteristics();
 };
