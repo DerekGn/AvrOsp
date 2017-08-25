@@ -101,12 +101,12 @@ BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CH
 	pGattDescriptors = getGattDescriptors(hBleDevice, pGattCharacteristic, &gattDescriptorsCount);
 
 	for (size_t i = 0; i < gattDescriptorsCount; i++)
-		gattDescriptors.push_back(new BleGattDescriptor(hBleDevice, &pGattDescriptors[i]));
+		bleGattDescriptors.push_back(new BleGattDescriptor(hBleDevice, &pGattDescriptors[i]));
 }
 
 BleGattCharacteristic::~BleGattCharacteristic()
 {
-	for (BleGattDescriptor *d : gattDescriptors)
+	for (BleGattDescriptor *d : bleGattDescriptors)
 		delete(d);
 
 	if (pGattDescriptors == nullptr)
@@ -232,4 +232,9 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 	}
 
 	return BleGattCharacteristicValue(pCharValueBuffer);
+}
+
+const BleGattCharacteristic::BleGattDescriptors& BleGattCharacteristic::getBleDescriptors()
+{
+	return bleGattDescriptors;
 }

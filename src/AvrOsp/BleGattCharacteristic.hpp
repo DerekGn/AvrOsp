@@ -35,7 +35,7 @@ using namespace std;
 class BleGattCharacteristic
 {
 	private:
-		HANDLE hBleDevice;
+		HANDLE hBleDevice = nullptr;
 
 		USHORT gattDescriptorsCount = 0;
 
@@ -46,7 +46,7 @@ class BleGattCharacteristic
 		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic,
 			_Out_ USHORT * pGattDescriptorsCount);
 
-		list<BleGattDescriptor*> gattDescriptors;
+		list<BleGattDescriptor*> bleGattDescriptors;
 
 	public:
 		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
@@ -78,5 +78,9 @@ class BleGattCharacteristic
 		BOOLEAN getHasExtendedProperties();
 
 		BleGattCharacteristicValue getValue();
+
+		typedef list<BleGattDescriptor*> BleGattDescriptors;
+
+		const BleGattDescriptors& getBleDescriptors();
 };
 #endif
