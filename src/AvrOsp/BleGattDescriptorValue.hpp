@@ -30,10 +30,10 @@ using namespace std;
 class BleGattDescriptorValue
 {
 	private:
-		PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue;
+		PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue = nullptr;
 
 	public:
-		BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
+		BleGattDescriptorValue(__in PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
 
 		~BleGattDescriptorValue();
 
