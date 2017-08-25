@@ -26,7 +26,7 @@ BleSerialDevice::BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescr
 {
 	bleSerialDeviceDescriptor = _bleSerialDeviceDescriptor;
 
-	pBleDevice = new BleDevice(bleSerialDeviceDescriptor.getBleDeviceInterfaceUUID());
+	//pBleDevice = new BleDevice(bleSerialDeviceDescriptor.getBleDeviceInterfaceUUID());
 }
 
 BleSerialDevice::~BleSerialDevice()

@@ -29,6 +29,12 @@ using namespace std;
 
 BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
 {
+	if (!_hBleDevice)
+		throw new ErrorMsg("hBleDevice is nullptr");
+
+	if (!_pGattDescriptor)
+		throw new ErrorMsg("pGattDescriptor is nullptr");
+
 	hBleDevice = _hBleDevice;
 	pGattDescriptor = _pGattDescriptor;
 }

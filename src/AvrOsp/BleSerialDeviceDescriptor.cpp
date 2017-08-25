@@ -39,11 +39,6 @@ BleSerialDeviceDescriptor::~BleSerialDeviceDescriptor()
 {
 }
 
-GUID BleSerialDeviceDescriptor::getBleDeviceInterfaceUUID()
-{
-	return GUID();
-}
-
 GUID BleSerialDeviceDescriptor::getSerialInCharacteristicUUID()
 {
 	return serialInCharacteristicUUID;

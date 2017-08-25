@@ -24,7 +24,7 @@
 
 BleGattCharacteristicValue::BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE _pGattCharacteristicValue)
 {
-	if (_pGattCharacteristicValue == nullptr)
+	if (!_pGattCharacteristicValue)
 		throw new ErrorMsg("_pGattCharacteristicValue is nullptr");
 
 	pGattCharacteristicValue = _pGattCharacteristicValue;

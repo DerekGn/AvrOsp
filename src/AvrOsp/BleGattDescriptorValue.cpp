@@ -19,11 +19,14 @@
 *
 *
 ****************************************************************************/
-
 #include "BleGattDescriptorValue.hpp"
+#include "Utility.hpp"
 
 BleGattDescriptorValue::BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE _pGattDescriptorValue)
 {
+	if (!_pGattDescriptorValue)
+		throw new ErrorMsg("pGattDescriptorValue is nullptr");
+
 	pGattDescriptorValue = _pGattDescriptorValue;
 }
 

@@ -94,6 +94,12 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 
 BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
 {
+	if (!_hBleDevice)
+		throw new ErrorMsg("hBleDevice is nullptr");
+
+	if (!_pGattCharacteristic)
+		throw new ErrorMsg("pGattCharacteristic is nullptr");
+
 	pGattCharacteristic = _pGattCharacteristic;
 	hBleDevice = _hBleDevice;
 
@@ -109,7 +115,7 @@ BleGattCharacteristic::~BleGattCharacteristic()
 	for (BleGattDescriptor *d : bleGattDescriptors)
 		delete(d);
 
-	if (pGattDescriptors == nullptr)
+	if (pGattDescriptors)
 		free(pGattDescriptors);
 }
 

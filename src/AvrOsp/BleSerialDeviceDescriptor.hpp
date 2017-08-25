@@ -40,9 +40,7 @@ class BleSerialDeviceDescriptor
 		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
 		
 		~BleSerialDeviceDescriptor();
-
-		GUID getBleDeviceInterfaceUUID();
-
+		
 		GUID getSerialInCharacteristicUUID();
 
 		GUID getSerialOutCharacteristicUUID();

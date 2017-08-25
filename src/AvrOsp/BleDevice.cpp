@@ -138,10 +138,8 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	PBTH_LE_GATT_SERVICE pServiceBuffer = (PBTH_LE_GATT_SERVICE)
 		malloc(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 
-	if (nullptr == _pGattServiceCount)
-	{
+	if (!_pGattServiceCount)
 		Util.handleMallocFailure(sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
-	}
 	else
 		RtlZeroMemory(pServiceBuffer, sizeof(BTH_LE_GATT_SERVICE) * *_pGattServiceCount);
 

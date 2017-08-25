@@ -35,12 +35,6 @@ using namespace std;
 
 void BleDeviceEnumerator::deletebleEnumeratedDevices()
 {
-	for (BleDeviceInfo *d : bleEnumeratedDevices)
-	{
-		delete(d);
-		d = nullptr;
-	}
-
 	bleEnumeratedDevices.clear();
 }
 
