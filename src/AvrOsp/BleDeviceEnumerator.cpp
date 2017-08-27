@@ -33,19 +33,27 @@
 
 using namespace std;
 
+BleDeviceEnumerator BleEnumerator;
+
+inline std::wstring& rtrim_null(std::wstring& s)
+{
+	s.erase(s.find_first_of(L'\0', 0));
+	return s;
+}
+
 void BleDeviceEnumerator::deletebleEnumeratedDevices()
 {
 	bleEnumeratedDevices.clear();
 }
 
-wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, PSP_DEVINFO_DATA did, int property)
+wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property)
 {
 	wstring text;
 	DWORD bufferSize = 0;
 
 	while (!SetupDiGetDeviceRegistryProperty(
 		hDI,
-		did,
+		&did,
 		property,
 		NULL,
 		(PBYTE)&text[0],
@@ -53,17 +61,9 @@ wstring BleDeviceEnumerator::getDeviceRegistryStringProperty(HDEVINFO hDI, PSP_D
 		&bufferSize))
 	{
 		if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-		{
 			text.resize(bufferSize);
-		}
 		else
-		{
-			stringstream msg;
-			msg << "Unable to read property. Reason: ["
-				<< Util.getLastError() << "]";
-
-			throw new ErrorMsg(msg.str());
-		}
+			break;
 	}
 
 	return text;
@@ -102,9 +102,9 @@ const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 	{
 		for (i = 0; SetupDiEnumDeviceInfo(hDI, i, &did); i++)
 		{
-			wstring name = getDeviceRegistryStringProperty(hDI, &did, SPDRP_FRIENDLYNAME);
+			wstring name = getDeviceRegistryStringProperty(hDI, did, SPDRP_FRIENDLYNAME);
 
-			wstring hwId = getDeviceRegistryStringProperty(hDI, &did, SPDRP_HARDWAREID);
+			wstring hwId = getDeviceRegistryStringProperty(hDI, did, SPDRP_HARDWAREID);
 
 			wstring deviceInstanceId;
 			DWORD bufferSize = 0;
@@ -117,20 +117,15 @@ const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 				&bufferSize))
 			{
 				if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-				{
 					deviceInstanceId.resize(bufferSize);
-				}
 				else
-				{
-					stringstream msg;
-					msg << "Unable to read device instance id. Reason: ["
-						<< Util.getLastError() << "]";
-
-					throw new ErrorMsg(msg.str());
-				}
+					break;
 			}
 
-			bleEnumeratedDevices.push_back(new BleDeviceInfo(name, hwId, deviceInstanceId));
+			if (name.size() > 0)
+			{
+				bleEnumeratedDevices.push_back(new BleDeviceInfo(rtrim_null(name), hwId, deviceInstanceId));
+			}	
 		}
 	}
 	catch (const std::exception&)

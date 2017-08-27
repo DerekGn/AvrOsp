@@ -22,11 +22,14 @@
 #ifndef BLEDEVICEENUMERATOR_HPP
 #define BLEDEVICEENUMERATOR_HPP
 
+#include <SetupAPI.h>
+
 #include "BleDeviceInfo.hpp"
 
 #include <list>
 
 using namespace std;
+
 
 class BleDeviceEnumerator
 {
@@ -35,7 +38,7 @@ class BleDeviceEnumerator
 
 		void deletebleEnumeratedDevices();
 
-		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, PSP_DEVINFO_DATA did, int property);
+		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property);
 
 	public:
 		BleDeviceEnumerator();
