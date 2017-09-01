@@ -36,7 +36,7 @@ class BleDeviceInfo
 		
 		wstring name;
 		
-		BLUETOOTH_ADDRESS address;
+		BLUETOOTH_ADDRESS* address;
 
 		unsigned long classOfDevice;
 
@@ -47,7 +47,7 @@ class BleDeviceInfo
 		bool remembered;
 
 	public:
-		BleDeviceInfo(int deviceId, wstring name, BLUETOOTH_ADDRESS address, 
+		BleDeviceInfo(int deviceId, wstring name, BLUETOOTH_ADDRESS* address, 
 			unsigned long classofDevice, bool connected, bool authenticated, bool remembered);
 
 		~BleDeviceInfo();
@@ -56,7 +56,7 @@ class BleDeviceInfo
 
 		wstring getName();
 
-		BLUETOOTH_ADDRESS getAddress();
+		BLUETOOTH_ADDRESS* getAddress();
 
 		unsigned long getClassofDevice();
 

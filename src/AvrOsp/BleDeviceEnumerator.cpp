@@ -137,7 +137,12 @@ void BleDeviceEnumerator::enumerateBleDevices(bool returnAuthenticated, bool ret
 
 		do
 		{
-			bleEnumeratedDevices.push_back(new BleDeviceInfo(deviceId++, std::wstring(deviceInfo.szName), deviceInfo.Address,
+			BLUETOOTH_ADDRESS* address = new BLUETOOTH_ADDRESS();
+			
+			for (size_t i = 0; i < 6; i++)
+				address->rgBytes[i] = deviceInfo.Address.rgBytes[i];
+		
+			bleEnumeratedDevices.push_back(new BleDeviceInfo(deviceId++, std::wstring(deviceInfo.szName), address,
 				deviceInfo.ulClassofDevice, deviceInfo.fConnected, deviceInfo.fAuthenticated, deviceInfo.fRemembered));
 
 			if (!BluetoothFindNextDevice(btDeviceFind, &deviceInfo))

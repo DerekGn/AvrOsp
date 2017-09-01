@@ -21,7 +21,7 @@
 ****************************************************************************/
 #include "BleDeviceInfo.hpp"
 
-BleDeviceInfo::BleDeviceInfo(int _deviceId, wstring _name, BLUETOOTH_ADDRESS _address,
+BleDeviceInfo::BleDeviceInfo(int _deviceId, wstring _name, BLUETOOTH_ADDRESS* _address,
 	unsigned long _classOfDevice, bool _connected, bool _authenticated, bool _remembered)
 {
 	deviceId = _deviceId;
@@ -35,6 +35,8 @@ BleDeviceInfo::BleDeviceInfo(int _deviceId, wstring _name, BLUETOOTH_ADDRESS _ad
 
 BleDeviceInfo::~BleDeviceInfo()
 {
+	if(address)
+		delete address;
 }
 
 int BleDeviceInfo::getDeviceId()
@@ -47,10 +49,10 @@ wstring BleDeviceInfo::getName()
 	return name;
 }
 
-//BLUETOOTH_ADDRESS BleDeviceInfo::getAddress()
-//{
-//	return address;
-//}
+BLUETOOTH_ADDRESS* BleDeviceInfo::getAddress()
+{
+	return address;
+}
 
 unsigned long BleDeviceInfo::getClassofDevice()
 {
