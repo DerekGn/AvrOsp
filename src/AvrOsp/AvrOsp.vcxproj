@@ -25,6 +25,7 @@
     <ClInclude Include="AVRProgrammer.hpp" />
     <ClInclude Include="BleDeviceInfo.hpp" />
     <ClInclude Include="BleDeviceEnumerator.hpp" />
+    <ClInclude Include="BleFunctions.hpp" />
     <ClInclude Include="BleGattCharacteristic.hpp" />
     <ClInclude Include="BleDevice.hpp" />
     <ClInclude Include="BleGattCharacteristicValue.hpp" />
@@ -49,6 +50,7 @@
     <ClCompile Include="AVRProgrammer.cpp" />
     <ClCompile Include="BleDeviceInfo.cpp" />
     <ClCompile Include="BleDeviceEnumerator.cpp" />
+    <ClCompile Include="BleFunctions.cpp" />
     <ClCompile Include="BleGattCharacteristic.cpp" />
     <ClCompile Include="BleDevice.cpp" />
     <ClCompile Include="BleGattCharacteristicValue.cpp" />

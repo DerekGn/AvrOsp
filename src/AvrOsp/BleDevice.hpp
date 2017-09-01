@@ -24,7 +24,7 @@
 using namespace std;
 
 #include <Rpc.h>
-#include <bluetoothleapis.h>
+#include <BluetoothAPIs.h>
 
 #include <list>
 #include <string>
@@ -45,9 +45,10 @@ class BleDevice
 
 		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 	
-		static HANDLE getBleDeviceHandle(__in GUID deviceInterfaceUUID);
+		static HANDLE getBleDeviceHandle(GUID deviceInterfaceUUID);
 
-		static PBTH_LE_GATT_SERVICE getGattServices(__in HANDLE hBleDeviceHandle, _Out_ USHORT * pGattServiceCount);
+		static PBTH_LE_GATT_SERVICE getGattServices(HANDLE hBleDeviceHandle, 
+			USHORT * pGattServiceCount);
 
 	public:
 		BleDevice(GUID _deviceInterfaceUUID);

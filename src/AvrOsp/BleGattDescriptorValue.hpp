@@ -33,7 +33,7 @@ class BleGattDescriptorValue
 		PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue = nullptr;
 
 	public:
-		BleGattDescriptorValue(__in PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
+		BleGattDescriptorValue(PBTH_LE_GATT_DESCRIPTOR_VALUE pGattDescriptorValue);
 
 		~BleGattDescriptorValue();
 

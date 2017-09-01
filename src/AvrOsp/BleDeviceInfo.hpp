@@ -22,6 +22,9 @@
 #ifndef BLEDEVICEINFO_HPP
 #define BLEDEVICEINFO_HPP
 
+#include <Windows.h>
+#include <BluetoothAPIs.h>
+
 #include <string>
 
 using namespace std;
@@ -29,22 +32,39 @@ using namespace std;
 class BleDeviceInfo
 {
 	private:
+		int deviceId;
+		
 		wstring name;
 		
-		wstring hardwareId;
+		BLUETOOTH_ADDRESS address;
+
+		unsigned long classOfDevice;
+
+		bool connected;
 		
-		wstring instanceId;
+		bool authenticated;
+		
+		bool remembered;
 
 	public:
-		BleDeviceInfo(wstring name, wstring hardwareId, wstring instanceId);
+		BleDeviceInfo(int deviceId, wstring name, BLUETOOTH_ADDRESS address, 
+			unsigned long classofDevice, bool connected, bool authenticated, bool remembered);
 
 		~BleDeviceInfo();
 
+		int getDeviceId();
+
 		wstring getName();
 
-		wstring getHardwareId();
+		BLUETOOTH_ADDRESS getAddress();
 
-		wstring getInstanceId();
+		unsigned long getClassofDevice();
+
+		bool getConnected();
+
+		bool getAuthenticated();
+
+		bool getRemembered();
 };
 
 #endif

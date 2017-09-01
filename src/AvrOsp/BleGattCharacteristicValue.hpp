@@ -31,7 +31,7 @@ class BleGattCharacteristicValue
 		PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue = nullptr;
 
 	public:
-		BleGattCharacteristicValue(__in PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
+		BleGattCharacteristicValue(PBTH_LE_GATT_CHARACTERISTIC_VALUE pGattCharacteristicValue);
 		
 		~BleGattCharacteristicValue();
 

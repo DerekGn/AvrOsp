@@ -22,14 +22,11 @@
 #ifndef BLEDEVICEENUMERATOR_HPP
 #define BLEDEVICEENUMERATOR_HPP
 
-#include <SetupAPI.h>
-
 #include "BleDeviceInfo.hpp"
 
 #include <list>
 
 using namespace std;
-
 
 class BleDeviceEnumerator
 {
@@ -38,12 +35,18 @@ class BleDeviceEnumerator
 
 		void deletebleEnumeratedDevices();
 
-		wstring getDeviceRegistryStringProperty(HDEVINFO hDI, SP_DEVINFO_DATA did, int property);
+		void checkBleRadioPresent(unsigned long classofDevice);
+
+		void enumerateBleDevices(bool returnAuthenticated, bool returnRemembered, bool returnUnknown, 
+			bool fReturnConnected, bool issueInquiry, unsigned char timeoutMultiplier);
 
 	public:
 		BleDeviceEnumerator();
 
 		~BleDeviceEnumerator();
+
+		void enumerate(bool returnAuthenticated, bool returnRemembered, bool returnUnknown, 
+			bool fReturnConnected, bool issueInquiry, unsigned char timeoutMultiplier);
 
 		typedef list<BleDeviceInfo*> BleDevices;
 

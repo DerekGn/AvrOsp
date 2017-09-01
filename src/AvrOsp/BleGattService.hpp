@@ -44,7 +44,8 @@ class BleGattService
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristics = nullptr;
 
-		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_SERVICE pGattService, _Out_ USHORT * pGattCharcteristicsCount);
+		static PBTH_LE_GATT_CHARACTERISTIC getGattCharacteristics(HANDLE hBleDeviceHandle, 
+			PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount);
 
 	public:
 		BleGattService(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pGattService);

@@ -19,7 +19,6 @@
 *
 *
 ****************************************************************************/
-
 #include "BleSerialDeviceDescriptor.hpp"
 
 using namespace std;

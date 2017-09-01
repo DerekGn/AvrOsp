@@ -43,8 +43,8 @@ class BleGattCharacteristic
 
 		PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic;
 
-		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(__in HANDLE hBleDeviceHandle, __in PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic,
-			_Out_ USHORT * pGattDescriptorsCount);
+		static PBTH_LE_GATT_DESCRIPTOR getGattDescriptors(HANDLE hBleDeviceHandle, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic,
+			USHORT * pGattDescriptorsCount);
 
 		list<BleGattDescriptor*> bleGattDescriptors;
 
