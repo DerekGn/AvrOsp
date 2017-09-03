@@ -124,7 +124,7 @@ const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 
 			if (name.size() > 0)
 			{
-				bleEnumeratedDevices.push_back(new BleDeviceInfo(rtrim_null(name), hwId, deviceInstanceId));
+				bleEnumeratedDevices.push_back(new BleDeviceInfo(rtrim_null(name), rtrim_null(hwId), rtrim_null(deviceInstanceId)));
 			}
 		}
 	}
