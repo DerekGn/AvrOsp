@@ -41,6 +41,11 @@ inline std::wstring& rtrim_null(std::wstring& s)
 	return s;
 }
 
+void BleDeviceEnumerator::enumerate()
+{
+
+}
+
 void BleDeviceEnumerator::deletebleEnumeratedDevices()
 {
 	bleEnumeratedDevices.clear();
@@ -85,7 +90,7 @@ const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 	SP_DEVINFO_DATA did;
 	DWORD i;
 
-	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_DEVCLASS_BLUETOOTH, NULL, NULL, DIGCF_PRESENT);
+	HDEVINFO hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
 	if (INVALID_HANDLE_VALUE == hDI)
 	{
