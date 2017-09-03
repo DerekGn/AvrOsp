@@ -41,11 +41,6 @@ inline std::wstring& rtrim_null(std::wstring& s)
 	return s;
 }
 
-void BleDeviceEnumerator::enumerate()
-{
-
-}
-
 void BleDeviceEnumerator::deletebleEnumeratedDevices()
 {
 	bleEnumeratedDevices.clear();
