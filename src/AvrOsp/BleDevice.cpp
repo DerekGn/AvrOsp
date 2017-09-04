@@ -34,20 +34,20 @@
 
 using namespace std;
 
-HANDLE BleDevice::getBleDeviceHandle(GUID deviceInterfaceUUID)
+HANDLE BleDevice::getBleDeviceHandle(wstring deviceInstanceId)
 {
 	HDEVINFO hDI;
 	SP_DEVICE_INTERFACE_DATA did;
 	SP_DEVINFO_DATA dd;
 	HANDLE hComm = NULL;
 
-	hDI = SetupDiGetClassDevs(&deviceInterfaceUUID, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
+	hDI = SetupDiGetClassDevs(&GUID_BLUETOOTHLE_DEVICE_INTERFACE, deviceInstanceId.c_str(), NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
 
 	if (hDI == INVALID_HANDLE_VALUE)
 	{
 		stringstream msg;
 		msg << "Unable to open device information set for device interface UUID: ["
-			<< Util.guidToString(deviceInterfaceUUID) << "] Reason: ["
+			<< Util.convertToString(deviceInstanceId) << "] Reason: ["
 			<< Util.getLastError() << "]";
 
 		throw new ErrorMsg(msg.str());
@@ -58,7 +58,7 @@ HANDLE BleDevice::getBleDeviceHandle(GUID deviceInterfaceUUID)
 
 	DWORD i = 0;
 
-	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &deviceInterfaceUUID, i, &did); i++)
+	for (i = 0; SetupDiEnumDeviceInterfaces(hDI, NULL, &GUID_BLUETOOTHLE_DEVICE_INTERFACE, i, &did); i++)
 	{
 		SP_DEVICE_INTERFACE_DETAIL_DATA DeviceInterfaceDetailData;
 
@@ -98,7 +98,7 @@ HANDLE BleDevice::getBleDeviceHandle(GUID deviceInterfaceUUID)
 	{
 		stringstream msg;
 		msg << "Device interface UUID: ["
-			<< Util.guidToString(deviceInterfaceUUID) << "] not found";
+			<< Util.convertToString(deviceInstanceId) << "] not found";
 
 		throw new ErrorMsg(msg.str());
 	}
@@ -159,11 +159,11 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(GUID _deviceInterfaceUUID)
+BleDevice::BleDevice(wstring _deviceInstanceId)
 {
-	deviceInterfaceUUID = _deviceInterfaceUUID;
+	deviceInstanceId = _deviceInstanceId;
 
-	hBleDevice = getBleDeviceHandle(deviceInterfaceUUID);
+	hBleDevice = getBleDeviceHandle(deviceInstanceId);
 
 	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
 
@@ -185,9 +185,9 @@ BleDevice::~BleDevice()
 		CloseHandle(hBleDevice);
 }
 
-GUID BleDevice::getDeviceInterfaceUUID()
+wstring BleDevice::getDeviceIntstanceId()
 {
-	return deviceInterfaceUUID;
+	return deviceInstanceId;
 }
 
 const BleDevice::BleGattServices & BleDevice::getBleGattServices()

@@ -29,7 +29,8 @@ using namespace std;
 #endif
 
 #include <Rpc.h>
-
+#include <locale>
+#include <codecvt>
 #include <vector>
 #include <string>
 #include "ErrorMsg.hpp"
@@ -65,7 +66,9 @@ class Utility
 
 		void handleMallocFailure(unsigned long size);
 
-		static string guidToString(GUID uuid);
+		string guidToString(GUID uuid);
+
+		string convertToString(wstring value);
 
 #ifndef NOREGISTRY	
 		string getRegistryValue( const string & path, const string & value );

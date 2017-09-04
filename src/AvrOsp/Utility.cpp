@@ -191,6 +191,13 @@ string Utility::guidToString(GUID uuid)
 	return guid;
 }
 
+string Utility::convertToString(wstring value)
+{
+	using convert_type = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_type, wchar_t> converter;
+	return converter.to_bytes(value);
+}
+
 #ifndef NOREGISTRY
 string Utility::getRegistryValue( const string & path, const string & value )
 {

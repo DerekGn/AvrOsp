@@ -39,23 +39,23 @@ class BleDevice
 
 		HANDLE hBleDevice = nullptr;
 
-		GUID deviceInterfaceUUID;
+		wstring deviceInstanceId;
 
 		USHORT gattServiceCount = 0;
 
 		PBTH_LE_GATT_SERVICE pGattServiceBuffer = nullptr;
 	
-		static HANDLE getBleDeviceHandle(GUID deviceInterfaceUUID);
+		static HANDLE getBleDeviceHandle(wstring deviceInstanceId);
 
 		static PBTH_LE_GATT_SERVICE getGattServices(HANDLE hBleDeviceHandle, 
 			USHORT * pGattServiceCount);
 
 	public:
-		BleDevice(GUID _deviceInterfaceUUID);
+		BleDevice(wstring deviceInstanceId);
 
 		~BleDevice();
 
-		GUID getDeviceInterfaceUUID();
+		wstring getDeviceIntstanceId();
 
 		typedef list<BleGattService*> BleGattServices;
 
