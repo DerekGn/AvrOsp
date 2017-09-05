@@ -35,6 +35,8 @@ using namespace std;
 class BleGattCharacteristic
 {
 	private:
+		GUID serviceUUID;
+
 		HANDLE hBleDevice = nullptr;
 
 		USHORT gattDescriptorsCount = 0;
@@ -49,7 +51,7 @@ class BleGattCharacteristic
 		list<BleGattDescriptor*> bleGattDescriptors;
 
 	public:
-		BleGattCharacteristic(HANDLE hBleDevice, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(HANDLE hBleDevice, GUID serviceUUID, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 

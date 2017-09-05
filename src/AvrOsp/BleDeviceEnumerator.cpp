@@ -78,7 +78,7 @@ BleDeviceEnumerator::~BleDeviceEnumerator()
 	deletebleEnumeratedDevices();
 }
 
-const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
+void BleDeviceEnumerator::enumerate()
 {
 	deletebleEnumeratedDevices();
 
@@ -133,6 +133,9 @@ const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
 		if (hDI)
 			SetupDiDestroyDeviceInfoList(hDI);
 	}
+}
 
+const BleDeviceEnumerator::BleDevices & BleDeviceEnumerator::getBleDevices()
+{
 	return bleEnumeratedDevices;
 }

@@ -45,6 +45,8 @@ public:
 
 	~BleDeviceEnumerator();
 
+	void enumerate();
+
 	typedef list<BleDeviceInfo*> BleDevices;
 
 	const BleDevices& getBleDevices();

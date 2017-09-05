@@ -108,7 +108,7 @@ BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattSe
 	pGattCharacteristics = getGattCharacteristics(hBleDevice, pGattService, &gattCharacteristicsCount);
 
 	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		bleGattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, &pGattCharacteristics[i]));
+		bleGattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, pGattService->ServiceUuid.Value.LongUuid, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()

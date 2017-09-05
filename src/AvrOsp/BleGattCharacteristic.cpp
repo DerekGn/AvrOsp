@@ -92,7 +92,7 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 	return pDescriptorBuffer;
 }
 
-BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
+BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, GUID _serviceUUID, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
 {
 	if (!_hBleDevice)
 		throw new ErrorMsg("hBleDevice is nullptr");
@@ -102,6 +102,7 @@ BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, PBTH_LE_GATT_CH
 
 	pGattCharacteristic = _pGattCharacteristic;
 	hBleDevice = _hBleDevice;
+	serviceUUID = _serviceUUID;
 
 	gattDescriptorsCount = 0;
 	pGattDescriptors = getGattDescriptors(hBleDevice, pGattCharacteristic, &gattDescriptorsCount);
