@@ -20,6 +20,7 @@
 *
 ****************************************************************************/
 #include "BleGattCharacteristic.hpp"
+
 #include "Utility.hpp"
 
 #include <sstream>
@@ -92,23 +93,20 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 	return pDescriptorBuffer;
 }
 
-BleGattCharacteristic::BleGattCharacteristic(HANDLE _hBleDevice, GUID _serviceUUID, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic)
+BleGattCharacteristic::BleGattCharacteristic(const BleServiceContext & _bleServiceContext, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic) 
+	: bleServiceContext(_bleServiceContext)
 {
-	if (!_hBleDevice)
-		throw new ErrorMsg("hBleDevice is nullptr");
-
 	if (!_pGattCharacteristic)
 		throw new ErrorMsg("pGattCharacteristic is nullptr");
 
 	pGattCharacteristic = _pGattCharacteristic;
-	hBleDevice = _hBleDevice;
-	serviceUUID = _serviceUUID;
-
+	//bleServiceContext = _bleServiceContext;
+	
 	gattDescriptorsCount = 0;
-	pGattDescriptors = getGattDescriptors(hBleDevice, pGattCharacteristic, &gattDescriptorsCount);
+	pGattDescriptors = getGattDescriptors(bleServiceContext.getBleDeviceContext().getBleDeviceHandle(), pGattCharacteristic, &gattDescriptorsCount);
 
 	for (size_t i = 0; i < gattDescriptorsCount; i++)
-		bleGattDescriptors.push_back(new BleGattDescriptor(hBleDevice, &pGattDescriptors[i]));
+		bleGattDescriptors.push_back(new BleGattDescriptor(bleServiceContext, &pGattDescriptors[i]));
 }
 
 BleGattCharacteristic::~BleGattCharacteristic()
@@ -188,7 +186,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 	if (pGattCharacteristic->IsReadable) 
 	{
 		HRESULT hr = BluetoothGATTGetCharacteristicValue(
-			hBleDevice,
+			bleServiceContext.getServcieHandle(),
 			pGattCharacteristic,
 			0,
 			NULL,
@@ -217,7 +215,7 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 
 
 		hr = BluetoothGATTGetCharacteristicValue(
-			hBleDevice,
+			bleServiceContext.getServcieHandle(),
 			pGattCharacteristic,
 			(ULONG)charValueDataSize,
 			pCharValueBuffer,

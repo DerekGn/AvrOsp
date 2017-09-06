@@ -20,6 +20,7 @@
 *
 ****************************************************************************/
 #include "BleGattService.hpp"
+#include "BleFunctions.hpp"
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
 
@@ -94,21 +95,20 @@ PBTH_LE_GATT_CHARACTERISTIC BleGattService::getGattCharacteristics(HANDLE hBleDe
 	return pCharBuffer;
 }
 
-BleGattService::BleGattService(HANDLE _hBleDevice, PBTH_LE_GATT_SERVICE _pGattService)
+BleGattService::BleGattService(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_SERVICE _pGattService)
+	:bleDeviceContext(_bleDeviceContext)
 {
-	if (!_hBleDevice)
-		throw new ErrorMsg("hBleDevice is nullptr");
-
 	if (!_pGattService)
 		throw new ErrorMsg("pGattService is nullptr");
 
 	pGattService = _pGattService;
-	hBleDevice = _hBleDevice;
+	
+	pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), pGattService, &gattCharacteristicsCount);
 
-	pGattCharacteristics = getGattCharacteristics(hBleDevice, pGattService, &gattCharacteristicsCount);
+	BleServiceContext BleServiceContext(bleDeviceContext, getBleInterfaceHandle(pGattService->ServiceUuid.Value.LongUuid, bleDeviceContext.getDeviceInstanceId()));
 
 	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		bleGattCharacteristics.push_back(new BleGattCharacteristic(hBleDevice, pGattService->ServiceUuid.Value.LongUuid, &pGattCharacteristics[i]));
+		bleGattCharacteristics.push_back(new BleGattCharacteristic(BleServiceContext, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()

@@ -25,6 +25,7 @@
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+#include "BleServiceContext.hpp"
 #include "BleGattDescriptorValue.hpp"
 
 using namespace std;
@@ -34,12 +35,13 @@ using namespace std;
 class BleGattDescriptor
 {
 	private:
-		HANDLE hBleDevice = nullptr;
+		
+		BleServiceContext bleServiceContext;
 		
 		PBTH_LE_GATT_DESCRIPTOR pGattDescriptor = nullptr;
 
 	public:
-		BleGattDescriptor(HANDLE hBleDevice, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
+		BleGattDescriptor(BleServiceContext & bleServiceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
 		~BleGattDescriptor();
 

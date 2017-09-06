@@ -25,6 +25,7 @@
 #include <Windows.h>
 #include <Bluetoothleapis.h>
 
+#include "BleServiceContext.hpp"
 #include "BleGattDescriptor.hpp"
 #include "BleGattCharacteristicValue.hpp"
 
@@ -36,10 +37,10 @@ class BleGattCharacteristic
 {
 	private:
 		GUID serviceUUID;
-
-		HANDLE hBleDevice = nullptr;
-
+		
 		USHORT gattDescriptorsCount = 0;
+
+		BleServiceContext bleServiceContext;
 
 		PBTH_LE_GATT_DESCRIPTOR pGattDescriptors = nullptr;
 
@@ -51,7 +52,7 @@ class BleGattCharacteristic
 		list<BleGattDescriptor*> bleGattDescriptors;
 
 	public:
-		BleGattCharacteristic(HANDLE hBleDevice, GUID serviceUUID, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(const BleServiceContext & bleServiceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 

@@ -6,4 +6,4 @@ using namespace std;
 
 HANDLE getBleInterfaceHandle(GUID interfaceUUID, wstring instanceId);
 
-void releaseBleInterfaceHandle(HANDLE hinterfaceHandle);
+void releaseBleInterfaceHandle(HANDLE hInterfaceHandle);

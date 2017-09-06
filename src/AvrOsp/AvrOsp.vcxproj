@@ -23,6 +23,7 @@
     <ClInclude Include="AVRDevice.hpp" />
     <ClInclude Include="AVRInSystemProg.hpp" />
     <ClInclude Include="AVRProgrammer.hpp" />
+    <ClInclude Include="BleDeviceContext.hpp" />
     <ClInclude Include="BleDeviceInfo.hpp" />
     <ClInclude Include="BleDeviceEnumerator.hpp" />
     <ClInclude Include="BleFunctions.hpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="BleSerialDeviceDescriptor.hpp" />
     <ClInclude Include="BleSerialDevice.hpp" />
     <ClInclude Include="BleGattService.hpp" />
+    <ClInclude Include="BleServiceContext.hpp" />
     <ClInclude Include="CommChannel.hpp" />
     <ClInclude Include="ErrorMsg.hpp" />
     <ClInclude Include="HEXParser.hpp" />
@@ -48,6 +50,7 @@
     <ClCompile Include="AVRDevice.cpp" />
     <ClCompile Include="AVRInSystemProg.cpp" />
     <ClCompile Include="AVRProgrammer.cpp" />
+    <ClCompile Include="BleDeviceContext.cpp" />
     <ClCompile Include="BleDeviceInfo.cpp" />
     <ClCompile Include="BleDeviceEnumerator.cpp" />
     <ClCompile Include="BleFunctions.cpp" />
@@ -59,6 +62,7 @@
     <ClCompile Include="BleSerialDeviceDescriptor.cpp" />
     <ClCompile Include="BleSerialDevice.cpp" />
     <ClCompile Include="BleGattService.cpp" />
+    <ClCompile Include="BleServiceContext.cpp" />
     <ClCompile Include="CommChannel.cpp" />
     <ClCompile Include="ErrorMsg.cpp" />
     <ClCompile Include="HEXParser.cpp" />

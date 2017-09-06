@@ -34,8 +34,9 @@ using namespace std;
 class BleGattService
 {
 	private:
-		HANDLE hBleDevice = nullptr;
-				
+		
+		BleDeviceContext bleDeviceContext;
+
 		USHORT gattCharacteristicsCount = 0;
 
 		PBTH_LE_GATT_SERVICE pGattService = nullptr;
@@ -48,7 +49,7 @@ class BleGattService
 			PBTH_LE_GATT_SERVICE pGattService, USHORT * pGattCharcteristicsCount);
 
 	public:
-		BleGattService(HANDLE hBleDevice, PBTH_LE_GATT_SERVICE pGattService);
+		BleGattService(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_SERVICE pGattService);
 
 		~BleGattService();
 

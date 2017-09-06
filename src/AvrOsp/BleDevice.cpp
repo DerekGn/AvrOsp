@@ -167,9 +167,11 @@ BleDevice::BleDevice(wstring _deviceInstanceId)
 
 	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
 
+	BleDeviceContext deviceContext(hBleDevice, deviceInstanceId);
+
 	for (size_t i = 0; i < gattServiceCount; i++)
 	{
-		bleGattServices.push_back(new BleGattService(hBleDevice, &pGattServiceBuffer[i]));
+		bleGattServices.push_back(new BleGattService(deviceContext, &pGattServiceBuffer[i]));
 	}
 }
 

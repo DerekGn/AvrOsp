@@ -27,15 +27,12 @@
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(HANDLE _hBleDevice, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
+BleGattDescriptor::BleGattDescriptor(BleServiceContext & _bleServiceContext, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
+	:bleServiceContext(_bleServiceContext)
 {
-	if (!_hBleDevice)
-		throw new ErrorMsg("hBleDevice is nullptr");
-
 	if (!_pGattDescriptor)
 		throw new ErrorMsg("pGattDescriptor is nullptr");
 
-	hBleDevice = _hBleDevice;
 	pGattDescriptor = _pGattDescriptor;
 }
 
@@ -74,7 +71,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	USHORT descValueDataSize;
 
 	HRESULT hr = BluetoothGATTGetDescriptorValue(
-		hBleDevice,
+		bleServiceContext.getServcieHandle(),
 		pGattDescriptor,
 		0,
 		NULL,
@@ -102,7 +99,7 @@ BleGattDescriptorValue* BleGattDescriptor::getValue()
 	}
 
 	hr = BluetoothGATTGetDescriptorValue(
-		hBleDevice,
+		bleServiceContext.getServcieHandle(),
 		pGattDescriptor,
 		(ULONG)descValueDataSize,
 		pDescValueBuffer,
