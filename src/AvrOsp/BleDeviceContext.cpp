@@ -20,15 +20,24 @@
 *
 ****************************************************************************/
 #include "BleDeviceContext.hpp"
+#include "BleFunctions.hpp"
 
 BleDeviceContext::BleDeviceContext(HANDLE _hBleDevice, wstring _deviceInstanceId)
 {
 	hBleDevice = _hBleDevice;
+	//hBleService = getBleInterfaceHandle();
 	deviceInstanceId = _deviceInstanceId;
 }
 
 BleDeviceContext::~BleDeviceContext()
 {
+	if (hBleService)
+		releaseBleInterfaceHandle(hBleService);
+}
+
+HANDLE BleDeviceContext::getBleServiceHandle()
+{
+	return hBleService;
 }
 
 HANDLE BleDeviceContext::getBleDeviceHandle()

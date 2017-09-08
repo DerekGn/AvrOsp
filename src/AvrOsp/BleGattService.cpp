@@ -105,10 +105,8 @@ BleGattService::BleGattService(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT
 	
 	pGattCharacteristics = getGattCharacteristics(bleDeviceContext.getBleDeviceHandle(), pGattService, &gattCharacteristicsCount);
 
-	BleServiceContext BleServiceContext(bleDeviceContext, getBleInterfaceHandle(pGattService->ServiceUuid.Value.LongUuid, bleDeviceContext.getDeviceInstanceId()));
-
 	for (size_t i = 0; i < gattCharacteristicsCount; i++)
-		bleGattCharacteristics.push_back(new BleGattCharacteristic(BleServiceContext, &pGattCharacteristics[i]));
+		bleGattCharacteristics.push_back(new BleGattCharacteristic(bleDeviceContext, &pGattCharacteristics[i]));
 }
 
 BleGattService::~BleGattService()

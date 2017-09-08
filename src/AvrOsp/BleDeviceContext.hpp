@@ -33,12 +33,16 @@ class BleDeviceContext
 	private:
 		HANDLE hBleDevice = nullptr;
 		
+		HANDLE hBleService = nullptr;
+
 		wstring deviceInstanceId;
 
 	public:
 		BleDeviceContext(HANDLE hBleDevice, wstring deviceInstanceId);
 		
 		~BleDeviceContext();
+
+		HANDLE getBleServiceHandle();
 
 		HANDLE getBleDeviceHandle();
 

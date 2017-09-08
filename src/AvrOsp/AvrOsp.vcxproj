@@ -36,7 +36,6 @@
     <ClInclude Include="BleSerialDeviceDescriptor.hpp" />
     <ClInclude Include="BleSerialDevice.hpp" />
     <ClInclude Include="BleGattService.hpp" />
-    <ClInclude Include="BleServiceContext.hpp" />
     <ClInclude Include="CommChannel.hpp" />
     <ClInclude Include="ErrorMsg.hpp" />
     <ClInclude Include="HEXParser.hpp" />
@@ -62,7 +61,6 @@
     <ClCompile Include="BleSerialDeviceDescriptor.cpp" />
     <ClCompile Include="BleSerialDevice.cpp" />
     <ClCompile Include="BleGattService.cpp" />
-    <ClCompile Include="BleServiceContext.cpp" />
     <ClCompile Include="CommChannel.cpp" />
     <ClCompile Include="ErrorMsg.cpp" />
     <ClCompile Include="HEXParser.cpp" />
