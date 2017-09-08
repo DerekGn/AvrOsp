@@ -159,15 +159,11 @@ PBTH_LE_GATT_SERVICE BleDevice::getGattServices(HANDLE _hBleDeviceHandle, USHORT
 	return pServiceBuffer;
 }
 
-BleDevice::BleDevice(wstring _deviceInstanceId)
+BleDevice::BleDevice(wstring _deviceInstanceId) : hBleDevice(getBleDeviceHandle(_deviceInstanceId)), deviceContext(hBleDevice, _deviceInstanceId)
 {
 	deviceInstanceId = _deviceInstanceId;
-
-	hBleDevice = getBleDeviceHandle(deviceInstanceId);
-
+	
 	pGattServiceBuffer = getGattServices(hBleDevice, &gattServiceCount);
-
-	BleDeviceContext deviceContext(hBleDevice, deviceInstanceId);
 
 	for (size_t i = 0; i < gattServiceCount; i++)
 	{

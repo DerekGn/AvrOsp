@@ -35,11 +35,13 @@ class BleDevice
 {
 	private:
 
-		list<BleGattService*> bleGattServices;
-
 		HANDLE hBleDevice = nullptr;
 
 		wstring deviceInstanceId;
+
+		BleDeviceContext deviceContext;
+
+		list<BleGattService*> bleGattServices;
 
 		USHORT gattServiceCount = 0;
 

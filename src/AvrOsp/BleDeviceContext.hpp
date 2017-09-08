@@ -28,6 +28,8 @@ using namespace std;
 
 #include <string>
 
+static const GUID UUID_DEVICE_INFO = { 0x0000180A, 0x0000, 0x1000, { 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB } };
+
 class BleDeviceContext
 {
 	private:
