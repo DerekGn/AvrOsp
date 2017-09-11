@@ -101,6 +101,11 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 	SP_DEVINFO_DATA dd;
 	HANDLE hComm = NULL;
 
+	basic_string <char>::size_type start = instanceId.find_first_of('_');
+	basic_string <char>::size_type end = instanceId.find_last_of('\\');
+
+	wstring deviceId = instanceId.substr(++start, end - start);
+
 	if ((hDI = SetupDiGetClassDevs(&interfaceUUID, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT)) == INVALID_HANDLE_VALUE)
 	{
 		stringstream msg;
@@ -142,12 +147,12 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 
 			_wcsupr_s(pInterfaceDetailData->DevicePath, wcslen(pInterfaceDetailData->DevicePath) + 1);
 
-			if (wcsstr(pInterfaceDetailData->DevicePath, &instanceId[0]) != NULL)
+			if (wcsstr(pInterfaceDetailData->DevicePath, &deviceId[0]) != NULL)
 			{
-				GlobalFree(pInterfaceDetailData);
-
 				hComm = CreateFile(pInterfaceDetailData->DevicePath,
 					GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+
+				GlobalFree(pInterfaceDetailData);
 
 				if (hComm == INVALID_HANDLE_VALUE)
 				{
@@ -168,17 +173,9 @@ HANDLE getBleServiceInterfaceHandle(GUID interfaceUUID, wstring instanceId)
 
 	SetupDiDestroyDeviceInfoList(hDI);
 
-	if (i == 0)
-	{
-		stringstream msg;
-		msg << "Device interface UUID: ["
-			<< Util.guidToString(interfaceUUID) << "] not found";
-
-		throw new ErrorMsg(msg.str());
-	}
-
 	return hComm;
 }
+
 
 void releaseBleInterfaceHandle(HANDLE hinterfaceHandle)
 {

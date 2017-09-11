@@ -39,7 +39,7 @@ class BleGattCharacteristic
 		
 		USHORT gattDescriptorsCount = 0;
 
-		BleDeviceContext bleDeviceContext;
+		BleDeviceContext& bleDeviceContext;
 
 		PBTH_LE_GATT_DESCRIPTOR pGattDescriptors = nullptr;
 
@@ -51,7 +51,7 @@ class BleGattCharacteristic
 		list<BleGattDescriptor*> bleGattDescriptors;
 
 	public:
-		BleGattCharacteristic(const BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
+		BleGattCharacteristic(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC pGattCharacteristic);
 		
 		~BleGattCharacteristic();
 

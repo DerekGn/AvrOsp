@@ -27,12 +27,12 @@
 
 using namespace std;
 
-BleGattDescriptor::BleGattDescriptor(BleDeviceContext & _bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor)
-	:bleDeviceContext(_bleDeviceContext)
+BleGattDescriptor::BleGattDescriptor(BleDeviceContext& _bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR _pGattDescriptor) :
+	bleDeviceContext(_bleDeviceContext)
 {
 	if (!_pGattDescriptor)
 		throw new ErrorMsg("pGattDescriptor is nullptr");
-
+	
 	pGattDescriptor = _pGattDescriptor;
 }
 

@@ -36,12 +36,12 @@ class BleGattDescriptor
 {
 	private:
 		
-		BleDeviceContext bleDeviceContext;
+		BleDeviceContext& bleDeviceContext;
 
 		PBTH_LE_GATT_DESCRIPTOR pGattDescriptor = nullptr;
 
 	public:
-		BleGattDescriptor(BleDeviceContext & bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
+		BleGattDescriptor(BleDeviceContext& bleDeviceContext, PBTH_LE_GATT_DESCRIPTOR pGattDescriptor);
 
 		~BleGattDescriptor();
 

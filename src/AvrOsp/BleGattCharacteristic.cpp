@@ -93,14 +93,16 @@ PBTH_LE_GATT_DESCRIPTOR BleGattCharacteristic::getGattDescriptors(HANDLE hBleDev
 	return pDescriptorBuffer;
 }
 
-BleGattCharacteristic::BleGattCharacteristic(const BleDeviceContext & _bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic) 
-	: bleDeviceContext(_bleDeviceContext)
+BleGattCharacteristic::BleGattCharacteristic(BleDeviceContext & _bleDeviceContext, PBTH_LE_GATT_CHARACTERISTIC _pGattCharacteristic) :
+	bleDeviceContext(_bleDeviceContext)
 {
 	if (!_pGattCharacteristic)
 		throw new ErrorMsg("pGattCharacteristic is nullptr");
 
 	pGattCharacteristic = _pGattCharacteristic;
-	
+
+	bleDeviceContext = _bleDeviceContext;
+
 	gattDescriptorsCount = 0;
 	pGattDescriptors = getGattDescriptors(bleDeviceContext.getBleDeviceHandle(), pGattCharacteristic, &gattDescriptorsCount);
 
@@ -211,7 +213,6 @@ BleGattCharacteristicValue BleGattCharacteristic::getValue()
 		{
 			RtlZeroMemory(pCharValueBuffer, charValueDataSize);
 		}
-
 
 		hr = BluetoothGATTGetCharacteristicValue(
 			bleDeviceContext.getBleServiceHandle(),

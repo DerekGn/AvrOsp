@@ -35,7 +35,7 @@ class BleGattService
 {
 	private:
 		
-		BleDeviceContext bleDeviceContext;
+		BleDeviceContext& bleDeviceContext;
 
 		USHORT gattCharacteristicsCount = 0;
 
