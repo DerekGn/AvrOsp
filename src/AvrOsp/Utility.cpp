@@ -100,7 +100,7 @@ string Utility::convertLong( long num, long radix )
 	char buf[18];
 	string res;
 
-	itoa( num, buf, radix );
+	_itoa_s( num, buf, radix );
 	res = buf;
 	return res;
 }

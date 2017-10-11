@@ -26,14 +26,11 @@ using namespace std;
 
 #include "BleSerialDeviceDescriptor.hpp"
 #include "CommChannel.hpp"
-#include "BleDevice.hpp"
 #include "ErrorMsg.hpp"
 
 class BleSerialDevice : public CommChannel
 {
 	private:
-		
-		BleDevice * pBleDevice = nullptr;
 
 		BleSerialDeviceDescriptor bleSerialDeviceDescriptor;
 

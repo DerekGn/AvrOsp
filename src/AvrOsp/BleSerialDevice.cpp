@@ -25,14 +25,10 @@
 BleSerialDevice::BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor)
 {
 	bleSerialDeviceDescriptor = _bleSerialDeviceDescriptor;
-
-	//pBleDevice = new BleDevice(bleSerialDeviceDescriptor.getBleDeviceInterfaceUUID());
 }
 
 BleSerialDevice::~BleSerialDevice()
 {
-	if (pBleDevice)
-		delete(pBleDevice);
 }
 
 void BleSerialDevice::openChannel()
