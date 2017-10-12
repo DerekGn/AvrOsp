@@ -21,6 +21,9 @@
  ****************************************************************************/
 
 #pragma comment(lib, "windowsapp")
+
+#include <thread>
+#include "BleSerialDevice.hpp"
 #include "winrt\Windows.Devices.Bluetooth.h"
 #include "winrt\Windows.Devices.Bluetooth.Advertisement.h"
 
@@ -783,6 +786,8 @@ void JobInfo::doJob()
 	{
 		Util.log("Scanning Ble for device...\n\r");
 
+		std::atomic<unsigned long long> deviceAddress = 0;
+
 		BluetoothLEAdvertisementWatcher watcher;
 		watcher.ScanningMode(BluetoothLEScanningMode::Passive);
 
@@ -790,24 +795,31 @@ void JobInfo::doJob()
 		{
 			watcher.Stop();
 
-//			deviceAddress = eventArgs.BluetoothAddress();
+			deviceAddress = eventArgs.BluetoothAddress();
 		});
 
-		Util.log("Waiting for device: \r\n");
+		Util.progress("Waiting for device: \r\n");
 
 		watcher.Start();
 
 		int count = 0;
 
-		/*while ((count++ < 10) && deviceAddress == 0)
+		while ((count++ < 10) && deviceAddress == 0)
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			std::cout << '.';
-		}*/
+			Util.progress(".");
+		}
 
-		Util.log("\r\nFinished waiting for device.\r\n");
+		Util.progress("\r\nFinished waiting for device.\r\n");
 
-		com = NULL;
+		if (deviceAddress != 0)
+		{
+		}
+		else
+		{
+			Util.log("Ble device not found!\r\n");
+			return;
+		}
 	}
 	else
 	{
