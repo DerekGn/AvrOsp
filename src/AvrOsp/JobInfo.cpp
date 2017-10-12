@@ -651,7 +651,14 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 
 				noProgressIndicator = true;
 				break;
+			case 'B' :
+				if (strlen(param) <= 2)
+					throw new ErrorMsg("Cannot use -B without the ble device name!");
 
+				/* Copy ble device name string to class variable */
+				bleDeviceName.assign(param + 2);
+				useBle = true;
+				break;
 
 			default:
 				throw new ErrorMsg( "Unknow parameter!" );
@@ -668,7 +675,7 @@ void JobInfo::help()
 		<< "        [-s] [-O index] [-O#value] [-Sf addr] [-Se addr] [-e] [-p f|e|b]" << endl
 		<< "        [-r f|e|b] [-v f|e|b] [-l value] [-L value] [-y] [-f value] [-E value]" << endl
 		<< "        [-F value] [-G value] [-q] [-x value] [-af start,stop] [-ae start,stop]" << endl
-		<< "        [-c port] [-b h|s] [-g] [-z] [-Y] [-h|?]" << endl
+		<< "        [-c port] [-b h|s] [-g] [-z] [-Y] [-B ble name] [-h|?]" << endl
 		<< endl
 		<< "Parameters:" << endl
 		<< "d       Device name. Must be applied when programming the device." << endl
@@ -721,6 +728,7 @@ void JobInfo::help()
 		<< "z       No progress indicator. E.g. if piping to a file for log purposes, use" << endl
 		<< "Y       Calibrate internal RC oscillator(AVR057). 'addr' is byte address" << endl
 		<< "        this option to avoid the characters used for the indicator." << endl
+		<< "B       Ble name. The name of the ble device to connect and flash." << endl
 		<< "h|?     Help information (overrides all other settings)." << endl
 		<< endl
 		<< "Example:" << endl
@@ -766,62 +774,75 @@ void JobInfo::doJob()
 
 	Util.log( "Serial port timeout set to " TIMEOUTSTRING " sec.\r\n" );
 
-	/* Need to scan for COM port? */
-	if( comPort == -1 )
+	if (useBle)
 	{
-		Util.log( "Scanning COM ports for supported programmer...\n\r" );
+		Util.log("Scanning Ble for device...\n\r");
 
-		for( scanCOM = 1; scanCOM <= 8; scanCOM++ )
-		{
-			Util.progress( "COM" + Util.convertLong( scanCOM ) + "...\r\n" );
+		//BluetoothLEAdvertisementWatcher watcher;
 
-			try
-			{
-				/* Try to communicate */
-				com = NULL;
-				com = new SerialPort( scanCOM, TIMEOUT );
-				com->openChannel();
-				programmerID = AVRProgrammer::readProgrammerID( com );
-
-				/* Contact! Check ID... Add custom handler signatures here */
-				if( programmerID == "AVRBOOT" || programmerID == "AVR ISP" )
-				{
-					break;
-				}
-
-				delete com;
-				Util.progress( programmerID + " found - not supported!\r\n" );
-			}
-			catch( ErrorMsg * e )
-			{
-				/* No contact on COM port, skip to next */
-				if( com != NULL ) delete com;
-				delete e;
-			}
-		}
-
-		/* Exit if no supported programmers found */
-		if( scanCOM > 8 )
-		{
-			Util.log( "No supported programmers found!\r\n" );
-			return;
-		}
-
-		comPort = scanCOM;
-
-	} else // ... COM port is specified
-	{
-		/* Try to communicate, errors will propagate to caller */
-		com = new SerialPort( comPort, TIMEOUT );
-		com->openChannel();
-		programmerID = AVRProgrammer::readProgrammerID( com );
-
-		/* Contact! Check ID */
-		if( programmerID != "AVRBOOT" && programmerID != "AVR ISP" )
-			throw new ErrorMsg( "Programmer not supported!" );
+		com = NULL;
 	}
+	else
+	{
+		/* Need to scan for COM port? */
+		if (comPort == -1)
+		{
+			Util.log("Scanning COM ports for supported programmer...\n\r");
 
-	Util.log( "Found " + programmerID + " on COM" + Util.convertLong( comPort ) + "!\r\n" );
+			for (scanCOM = 1; scanCOM <= 8; scanCOM++)
+			{
+				Util.progress("COM" + Util.convertLong(scanCOM) + "...\r\n");
+
+				try
+				{
+					/* Try to communicate */
+					com = NULL;
+					com = new SerialPort(scanCOM, TIMEOUT);
+					com->openChannel();
+					programmerID = AVRProgrammer::readProgrammerID(com);
+
+					/* Contact! Check ID... Add custom handler signatures here */
+					if (programmerID == "AVRBOOT" || programmerID == "AVR ISP")
+					{
+						break;
+					}
+
+					delete com;
+					Util.progress(programmerID + " found - not supported!\r\n");
+				}
+				catch (ErrorMsg * e)
+				{
+					/* No contact on COM port, skip to next */
+					if (com != NULL) delete com;
+					delete e;
+				}
+			}
+
+			/* Exit if no supported programmers found */
+			if (scanCOM > 8)
+			{
+				Util.log("No supported programmers found!\r\n");
+				return;
+			}
+
+			comPort = scanCOM;
+
+		}
+		else // ... COM port is specified
+		{
+			/* Try to communicate, errors will propagate to caller */
+			com = new SerialPort(comPort, TIMEOUT);
+			com->openChannel();
+			programmerID = AVRProgrammer::readProgrammerID(com);
+
+			/* Contact! Check ID */
+			if (programmerID != "AVRBOOT" && programmerID != "AVR ISP")
+				throw new ErrorMsg("Programmer not supported!");
+		}
+
+		Util.log("Found " + programmerID + " on COM" + Util.convertLong(comPort) + "!\r\n");
+	}
+	
 
 	/* Create programmer interface object, add custom handlers here */
 	if( programmerID == "AVRBOOT" )

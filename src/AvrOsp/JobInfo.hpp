@@ -63,8 +63,10 @@ class JobInfo
 		bool readLockBits; // Lock bit readout desired?
 		bool readFuseBits; // Fuse bit readout desired?
 		bool readOSCCAL; // Read or use specified OSCCAL value, if -O is used?
+		bool useBle; // Use ble as communication channel
 
 		string deviceName; // Specified device name.
+		string bleDeviceName; // Specified ble device name.
 		string inputFileFlash; // Input file for Flash writing and verification.
 		string inputFileEEPROM; // Input file for E2 writing and verification.
 		string outputFileFlash; // Output file for Flash readout.
