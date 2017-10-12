@@ -28,7 +28,6 @@
 #ifndef COMMCHANNEL_HPP
 #define COMMCHANNEL_HPP
 
-using namespace std;
 
 class CommChannel
 {

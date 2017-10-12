@@ -757,6 +757,7 @@ void JobInfo::doJob()
 {
 	long scanCOM;
 	SerialPort * com;
+	BleSerialDevice * bleCom;
 	AVRProgrammer * prog;
 	AVRDevice * avr;
 	string programmerID;
@@ -814,6 +815,14 @@ void JobInfo::doJob()
 
 		if (deviceAddress != 0)
 		{
+			/* Try to communicate, errors will propagate to caller */
+			bleCom = new BleSerialDevice(deviceAddress);
+			com->openChannel();
+			programmerID = AVRProgrammer::readProgrammerID(com);
+
+			/* Contact! Check ID */
+			if (programmerID != "AVRBOOT" && programmerID != "AVR ISP")
+				throw new ErrorMsg("Programmer not supported!");
 		}
 		else
 		{

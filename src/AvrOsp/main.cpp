@@ -18,15 +18,20 @@
  *
  * 
  ****************************************************************************/
+
+#include "winrt\Windows.Foundation.h"
+using namespace winrt;
+
 #include "JobInfo.hpp"
 #include <vector>
 #include <string>
 
 using namespace std;
 
-
 int main(int argc, char *argv[])
 {
+	init_apartment();
+
 	JobInfo j;
 
 	try

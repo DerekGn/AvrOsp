@@ -22,20 +22,30 @@
 #ifndef BLESERIALDEVICE_HPP
 #define BLESERIALDEVICE_HPP
 
-#include "BleSerialDeviceDescriptor.hpp"
 #include "CommChannel.hpp"
 #include "ErrorMsg.hpp"
 
-using namespace std;
+#include "winrt\Windows.Devices.Bluetooth.h"
+
+using namespace winrt;
+using namespace Windows::Devices::Bluetooth;
+using namespace Windows::Devices::Bluetooth::GenericAttributeProfile;
 
 class BleSerialDevice : public CommChannel
 {
 	private:
+		bool channelOpen; // Is channel open?
 
-		BleSerialDeviceDescriptor bleSerialDeviceDescriptor;
+		unsigned long long deviceAddress;
+
+		BluetoothLEDevice device = nullptr;
+
+		GattCharacteristic txCharacteristic = nullptr;
+
+		GattCharacteristic rxCharacteristic = nullptr;
 
 	public:
-		BleSerialDevice(BleSerialDeviceDescriptor _bleSerialDeviceDescriptor);
+		BleSerialDevice(unsigned long long deviceAddress);
 
 		~BleSerialDevice();
 

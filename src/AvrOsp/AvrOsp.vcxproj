@@ -25,7 +25,6 @@
     <ClInclude Include="AVRInSystemProg.hpp" />
     <ClInclude Include="AVRProgrammer.hpp" />
     <ClInclude Include="BleGattServices.hpp" />
-    <ClInclude Include="BleSerialDeviceDescriptor.hpp" />
     <ClInclude Include="BleSerialDevice.hpp" />
     <ClInclude Include="CommChannel.hpp" />
     <ClInclude Include="ErrorMsg.hpp" />
@@ -40,7 +39,6 @@
     <ClCompile Include="AVRDevice.cpp" />
     <ClCompile Include="AVRInSystemProg.cpp" />
     <ClCompile Include="AVRProgrammer.cpp" />
-    <ClCompile Include="BleSerialDeviceDescriptor.cpp" />
     <ClCompile Include="BleSerialDevice.cpp" />
     <ClCompile Include="CommChannel.cpp" />
     <ClCompile Include="ErrorMsg.cpp" />
@@ -126,6 +124,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -140,6 +139,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);NOREGISTRY</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +156,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -174,6 +175,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);NOREGISTRY</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/await %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
