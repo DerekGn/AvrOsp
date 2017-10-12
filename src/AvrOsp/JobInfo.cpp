@@ -4,11 +4,11 @@
  *
  * File              : JobInfo.cpp
  * Compiler          : Dev-C++ 4.9.8.0 - http://bloodshed.net/dev/
- * Revision          : $Revision: 1163 $
- * Date              : $Date: 2006-08-02 15:38:16 +0200 (on, 02 aug 2006) $
- * Updated by        : $Author: ohlia $
+ * Revision          : $Revision: 1164 $
+ * Date              : $Date:  $
+ * Updated by        : $Author: dgoslin $
  *
- * Support mail      : avr@atmel.com
+ * Support mail      :
  *
  * Target platform   : Win32
  *
@@ -19,6 +19,11 @@
  *
  *
  ****************************************************************************/
+
+#pragma comment(lib, "windowsapp")
+#include "winrt\Windows.Devices.Bluetooth.h"
+#include "winrt\Windows.Devices.Bluetooth.Advertisement.h"
+
 #include "JobInfo.hpp"
 
 #include <conio.h>
@@ -28,6 +33,8 @@
 #define TIMEOUT 5
 #define TIMEOUTSTRING "5"
 
+using namespace winrt;
+using namespace Windows::Devices::Bluetooth::Advertisement;
 
 JobInfo::JobInfo()
 {
@@ -772,18 +779,40 @@ void JobInfo::doJob()
 		return;
 	}
 
-	Util.log( "Serial port timeout set to " TIMEOUTSTRING " sec.\r\n" );
-
 	if (useBle)
 	{
 		Util.log("Scanning Ble for device...\n\r");
 
-		//BluetoothLEAdvertisementWatcher watcher;
+		BluetoothLEAdvertisementWatcher watcher;
+		watcher.ScanningMode(BluetoothLEScanningMode::Passive);
+
+		watcher.Received([&](BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
+		{
+			watcher.Stop();
+
+//			deviceAddress = eventArgs.BluetoothAddress();
+		});
+
+		Util.log("Waiting for device: \r\n");
+
+		watcher.Start();
+
+		int count = 0;
+
+		/*while ((count++ < 10) && deviceAddress == 0)
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::cout << '.';
+		}*/
+
+		Util.log("\r\nFinished waiting for device.\r\n");
 
 		com = NULL;
 	}
 	else
 	{
+		Util.log("Serial port timeout set to " TIMEOUTSTRING " sec.\r\n");
+
 		/* Need to scan for COM port? */
 		if (comPort == -1)
 		{
