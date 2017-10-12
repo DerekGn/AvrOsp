@@ -21,8 +21,6 @@
 #ifndef HEXPARSER_HPP
 #define HEXPARSER_HPP
 
-using namespace std;
-
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
 #include <iostream>
@@ -38,8 +36,8 @@ class HEXFile
 		long start, end; // Used data range.
 		long size; // Size of databuffer.
 
-		void writeRecord( ofstream & f, HEXRecord * recp );
-		void parseRecord( const string & hexLine, HEXRecord * recp );
+		void writeRecord( std::ofstream & f, HEXRecord * recp );
+		void parseRecord( const std::string & hexLine, HEXRecord * recp );
 
 	public:
 		/* Constructor */
@@ -49,8 +47,8 @@ class HEXFile
 		~HEXFile();
 
 		/* Methods */
-		void readFile( const string & _filename ); // Read data from HEX file.
-		void writeFile( const string & _filename ); // Write data to HEX file.
+		void readFile( const std::string & _filename ); // Read data from HEX file.
+		void writeFile( const std::string & _filename ); // Write data to HEX file.
 
 		void setUsedRange( long _start, long _end ); // Sets the used range.
 		void clearAll( long value = 0xff ); // Set databuffer to this value.

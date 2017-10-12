@@ -42,9 +42,9 @@ AVRProgrammer::~AVRProgrammer()
 }
 
 
-string AVRProgrammer::readProgrammerID( CommChannel * _comm )
+std::string AVRProgrammer::readProgrammerID( CommChannel * _comm )
 {
-	string id( "1234567" ); // Reserve 7 characters.
+	std::string id( "1234567" ); // Reserve 7 characters.
 
 	if( _comm == NULL )
 		throw new ErrorMsg( "NULL pointer provided for communication channel!" );

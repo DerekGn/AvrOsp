@@ -22,8 +22,6 @@
 #ifndef BLESERIALDEVICE_HPP
 #define BLESERIALDEVICE_HPP
 
-using namespace std;
-
 #include "BleSerialDeviceDescriptor.hpp"
 #include "CommChannel.hpp"
 #include "ErrorMsg.hpp"

@@ -22,22 +22,20 @@
 #ifndef BLESERIALDEVICEDESCRIPTOR_HPP
 #define BLESERIALDEVICEDESCRIPTOR_HPP
 
-using namespace std;
-
 #include <Rpc.h>
 #include <string>
 
 class BleSerialDeviceDescriptor
 {
 	private:
-		string bleSerialDeviceType;			// The ble serial device type
+		std::string bleSerialDeviceType;			// The ble serial device type
 		GUID serialInCharacteristicUUID;	// The characteristic for serial in data
 		GUID serialOutCharacteristicUUID;	// The characteristic for serial out data
 
 	public:
 		BleSerialDeviceDescriptor();
 
-		BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
+		BleSerialDeviceDescriptor(std::string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID);
 		
 		~BleSerialDeviceDescriptor();
 		

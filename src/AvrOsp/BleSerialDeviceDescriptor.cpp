@@ -21,13 +21,11 @@
 ****************************************************************************/
 #include "BleSerialDeviceDescriptor.hpp"
 
-using namespace std;
-
 BleSerialDeviceDescriptor::BleSerialDeviceDescriptor()
 {
 }
 
-BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
+BleSerialDeviceDescriptor::BleSerialDeviceDescriptor(std::string _bleSerialDeviceType, GUID _serialInCharacteristicUUID, GUID _serialOutCharacteristicUUID)
 {
 	bleSerialDeviceType = _bleSerialDeviceType;
 	serialInCharacteristicUUID = _serialInCharacteristicUUID;

@@ -22,8 +22,6 @@
 #ifndef AVRINSYSTEMPROG_HPP
 #define AVRINSYSTEMPROG_HPP
 
-using namespace std;
-
 #include "AVRProgrammer.hpp"
 #include "Utility.hpp"
 

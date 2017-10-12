@@ -24,8 +24,6 @@
 #ifndef AVRPROGRAMMER_HPP
 #define AVRPROGRAMMER_HPP
 
-using namespace std;
-
 #include "ErrorMsg.hpp"
 #include "HEXParser.hpp"
 #include "CommChannel.hpp"
@@ -44,7 +42,7 @@ class AVRProgrammer
 		~AVRProgrammer();
 
 		/* Static member */
-		static string readProgrammerID( CommChannel * _comm ); // Reads 7-character ID.
+		static std::string readProgrammerID( CommChannel * _comm ); // Reads 7-character ID.
 
 		/* Methods */
 		void setPagesize( long _pagesize ) { pagesize = _pagesize; }

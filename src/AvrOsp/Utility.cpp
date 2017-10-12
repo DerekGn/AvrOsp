@@ -48,21 +48,21 @@ Utility::~Utility()
 
 
 
-void Utility::log( const string & txt )
+void Utility::log( const std::string & txt )
 {
 	if( !noLog )
-		cout << txt;
+		std::cout << txt;
 }
 
 
-void Utility::progress( const string & txt )
+void Utility::progress( const std::string & txt )
 {
 	if( !noProgress )
-		cout << txt;
+		std::cout << txt;
 }
 
 
-long Utility::convertHex( const string & txt )
+long Utility::convertHex( const std::string & txt )
 {
 	long result = 0;
 	long digit;
@@ -95,10 +95,10 @@ long Utility::convertHex( const string & txt )
 }
 
 
-string Utility::convertLong( long num, long radix )
+std::string Utility::convertLong( long num, long radix )
 {
 	char buf[18];
-	string res;
+	std::string res;
 
 	_itoa_s( num, buf, radix );
 	res = buf;
@@ -106,12 +106,12 @@ string Utility::convertLong( long num, long radix )
 }
 
 
-void Utility::parsePath( vector<string> & list )
+void Utility::parsePath( std::vector<std::string> & list )
 {
 	/* Get environment variable and parse if it exists */
 	char * pathptr = getenv( "PATH" );
 	if( pathptr != NULL && pathptr[0] != 0 ) {
-		string path = pathptr;
+		std::string path = pathptr;
 		int pos;
 
 		while( (pos = path.find_first_of( ";" )) < path.length() ) {
@@ -124,11 +124,11 @@ void Utility::parsePath( vector<string> & list )
 }
 
 
-bool Utility::fileExists( string filename )
+bool Utility::fileExists( std::string filename )
 {
 	/* Attempt to open file */
-	ifstream f;
-	f.open( filename.c_str(), ios::in );
+	std::ifstream f;
+	f.open( filename.c_str(), std::ios::in );
 	if( !f ) {
 		return false;
 	} else {
@@ -138,11 +138,11 @@ bool Utility::fileExists( string filename )
 }
 
 
-void Utility::saveString( string txt, string filename )
+void Utility::saveString( std::string txt, std::string filename )
 {
-	ofstream f;
+	std::ofstream f;
 
-	f.open( filename.c_str(), ios::out );
+	f.open( filename.c_str(), std::ios::out );
 	if( !f )
 		throw new ErrorMsg( "Error opening HEX file for output!" );
 
@@ -151,18 +151,18 @@ void Utility::saveString( string txt, string filename )
 	f.close();
 }
 
-string Utility::getLastError()
+std::string Utility::getLastError()
 {
 	DWORD errorMessageID = ::GetLastError();
 
 	if (errorMessageID == 0)
-		return string();
+		return std::string();
 
 	LPSTR messageBuffer = nullptr;
 	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
-	string message(messageBuffer, size);
+	std::string message(messageBuffer, size);
 
 	LocalFree(messageBuffer);
 
@@ -172,15 +172,15 @@ string Utility::getLastError()
 
 void Utility::handleMallocFailure(unsigned long size)
 {
-	stringstream msg;
+	std::stringstream msg;
 	msg << "Unable to allocate [" << size << "] bytes";
 
 	throw new ErrorMsg(msg.str());
 }
 
-string Utility::guidToString(GUID uuid)
+std::string Utility::guidToString(GUID uuid)
 {
-	string guid;
+	std::string guid;
 	RPC_CSTR szUuid = NULL;
 	if (::UuidToStringA(&uuid, &szUuid) == RPC_S_OK)
 	{
@@ -191,7 +191,7 @@ string Utility::guidToString(GUID uuid)
 	return guid;
 }
 
-string Utility::convertToString(wstring value)
+std::string Utility::convertToString(std::wstring value)
 {
 	using convert_type = std::codecvt_utf8<wchar_t>;
 	std::wstring_convert<convert_type, wchar_t> converter;
@@ -199,11 +199,11 @@ string Utility::convertToString(wstring value)
 }
 
 #ifndef NOREGISTRY
-string Utility::getRegistryValue( const string & path, const string & value )
+string Utility::getRegistryValue( const std::string & path, const std::string & value )
 {
 	/* Code modified from MSDN */
 	const long BUFSIZE=1000;
-	string result;
+	std::string result;
 	HKEY hKey;
 	char szAVRPath[BUFSIZE];
 	DWORD dwBufLen=BUFSIZE;

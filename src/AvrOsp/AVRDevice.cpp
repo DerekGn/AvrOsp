@@ -24,7 +24,7 @@
 
 
 /* Constructor */
-AVRDevice::AVRDevice( const string & _deviceName ) :
+AVRDevice::AVRDevice( const std::string & _deviceName ) :
 	deviceName( _deviceName )
 {
 	flashSize =
@@ -45,11 +45,11 @@ AVRDevice::~AVRDevice()
 }
 
 /* Read parameters from AVR Studio XML files */	
-void AVRDevice::readParametersFromAVRStudio( vector<string> & searchpath )
+void AVRDevice::readParametersFromAVRStudio( std::vector<std::string> & searchpath )
 {
-	string path;
-	string signature;
-	string cache;
+	std::string path;
+	std::string signature;
+	std::string cache;
 
 #ifndef NOREGISTRY
 	/* Locate the directory containing the XML files from the Windows registry database */

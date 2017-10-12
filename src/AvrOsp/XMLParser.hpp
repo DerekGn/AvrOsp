@@ -22,8 +22,6 @@
 #ifndef XMLPARSER_HPP
 #define XMLPARSER_HPP
 
-using namespace std;
-
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
 #include <iostream>
@@ -41,22 +39,22 @@ class XMLFile
 	protected:
 		XMLTree * root; // The root node, either a subtree or an ordinary node.
 
-		void XMLFile::removeStartXML( string & txt ); // Remove the start xml tag.
-		void removeComments( string & txt ); // Remove comment tags.
-		void removeAttributes( string & txt ); // Remove attributes from tags.
-		void readFile( const string & _filename ); // Read XML file.
-		void parseFragment( string & fragment, XMLTree * parent );
+		void XMLFile::removeStartXML( std::string & txt ); // Remove the start xml tag.
+		void removeComments( std::string & txt ); // Remove comment tags.
+		void removeAttributes( std::string & txt ); // Remove attributes from tags.
+		void readFile( const std::string & _filename ); // Read XML file.
+		void parseFragment( std::string & fragment, XMLTree * parent );
 
 	public:
 		/* Constructors */
-		XMLFile( const string & _filename );
+		XMLFile( const std::string & _filename );
 
 		/* Destructor */
 		~XMLFile();
 
 		/* Methods */
-		bool exists( const string & path ); // Checks if node exists.
-		const string & getValue( const string & path ); // Get node value.
+		bool exists( const std::string & path ); // Checks if node exists.
+		const std::string & getValue( const std::string & path ); // Get node value.
 
 		void print();
 };

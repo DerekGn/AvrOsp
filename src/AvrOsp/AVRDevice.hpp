@@ -23,9 +23,6 @@
 #ifndef AVRDEVICE_HPP
 #define AVRDEVICE_HPP
 
-using namespace std;
-
-
 #include <string>
 #include <vector>
 #include "Utility.hpp"
@@ -35,7 +32,7 @@ using namespace std;
 class AVRDevice
 {
 	protected:
-		string deviceName; // The name of the device, eg. ATmega128.
+		std::string deviceName; // The name of the device, eg. ATmega128.
 
 		long flashSize; // Size of Flash memory in bytes.
 		long eepromSize; // Size of EEPROM memory in bytes.
@@ -48,13 +45,13 @@ class AVRDevice
 
 	public:
 		/* Constructor */
-		AVRDevice( const string & _deviceName );
+		AVRDevice( const std::string & _deviceName );
 
 		/* Destructor */
 		~AVRDevice();
 
 		/* Methods */
-		void readParametersFromAVRStudio( vector<string> & searchpath );
+		void readParametersFromAVRStudio( std::vector<std::string> & searchpath );
 
 		long getFlashSize() { return flashSize; }
 		long getEEPROMSize() { return eepromSize; }

@@ -112,9 +112,9 @@ unsigned char AVRInSystemProg::RC_Calibrate()
           return 0;
       else
       {
-          cout<< "Calibration Done!\r\n";
-          cout<< "OSCCAL Value = " << (unsigned int)oscval;
-          cout<<"\r\n";
+		  std::cout<< "Calibration Done!\r\n";
+		  std::cout<< "OSCCAL Value = " << (unsigned int)oscval;
+		  std::cout<<"\r\n";
           return oscval; // Indicate supported command.
       }
 }
@@ -164,16 +164,16 @@ bool AVRInSystemProg::checkSignature( long sig0, long sig1, long sig2 )
 	/* Compare signature */
 	if( sig[0] != sig0 || sig[1] != sig1 || sig[2] != sig2 )
 	{
-		ostringstream msg;
+		std::ostringstream msg;
 		msg << "Signature does not match selected device! ";
-		msg << "Actual signature: (" << hex
-			<< "0x" << setw(2) << sig[0] << " "
-			<< "0x" << setw(2) << sig[1] << " "
-			<< "0x" << setw(2) << sig[2] << ") "
-			<< "Signature from XML-file: (" << hex
-			<< "0x" << setw(2) << sig0 << " "
-			<< "0x" << setw(2) << sig1 << " "
-			<< "0x" << setw(2) << sig2 << ").";
+		msg << "Actual signature: (" << std::hex
+			<< "0x" << std::setw(2) << sig[0] << " "
+			<< "0x" << std::setw(2) << sig[1] << " "
+			<< "0x" << std::setw(2) << sig[2] << ") "
+			<< "Signature from XML-file: (" << std::hex
+			<< "0x" << std::setw(2) << sig0 << " "
+			<< "0x" << std::setw(2) << sig1 << " "
+			<< "0x" << std::setw(2) << sig2 << ").";
 
 		throw new ErrorMsg( msg.str() );
 	}

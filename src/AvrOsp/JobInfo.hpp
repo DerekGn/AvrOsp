@@ -22,8 +22,6 @@
 #ifndef JOBINFO_HPP
 #define JOBINFO_HPP
 
-using namespace std;
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -65,12 +63,12 @@ class JobInfo
 		bool readOSCCAL; // Read or use specified OSCCAL value, if -O is used?
 		bool useBle; // Use ble as communication channel
 
-		string deviceName; // Specified device name.
-		string bleDeviceName; // Specified ble device name.
-		string inputFileFlash; // Input file for Flash writing and verification.
-		string inputFileEEPROM; // Input file for E2 writing and verification.
-		string outputFileFlash; // Output file for Flash readout.
-		string outputFileEEPROM; // Output file for E2 readout.
+		std::string deviceName; // Specified device name.
+		std::string bleDeviceName; // Specified ble device name.
+		std::string inputFileFlash; // Input file for Flash writing and verification.
+		std::string inputFileEEPROM; // Input file for E2 writing and verification.
+		std::string outputFileFlash; // Output file for Flash readout.
+		std::string outputFileEEPROM; // Output file for E2 readout.
 
 		long OSCCAL_Parameter; // Value of the -O parameter, -1 if unspecified.
 
@@ -97,7 +95,7 @@ class JobInfo
 
 		long comPort; // Desired COM port to use, -1 if unspecified.
 
-		vector<string> searchpath; // Search path for XML-files.
+		std::vector<std::string> searchpath; // Search path for XML-files.
 
 	public:
 		JobInfo(); // Constructor

@@ -22,9 +22,6 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
-
 int main(int argc, char *argv[])
 {
 	JobInfo j;
@@ -36,8 +33,8 @@ int main(int argc, char *argv[])
 	}
 	catch( ErrorMsg * e )
 	{
-		cout << endl << "An error occurred:" << endl;
-		cout << "  [" << e->What() << "]" << endl;
+		std::cout << std::endl << "An error occurred:" << std::endl;
+		std::cout << "  [" << e->What() << "]" << std::endl;
 
 		delete e;
 	}

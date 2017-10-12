@@ -23,8 +23,6 @@
 #ifndef AVRBOOTLOADER_HPP
 #define AVRBOOTLOADER_HPP
 
-using namespace std;
-
 #include "AVRProgrammer.hpp"
 #include "Utility.hpp"
 

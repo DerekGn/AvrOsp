@@ -31,7 +31,7 @@ struct HEXRecord // Intel HEX file record
 };
 
 
-void HEXFile::writeRecord( ofstream & f, HEXRecord * recp )
+void HEXFile::writeRecord( std::ofstream & f, HEXRecord * recp )
 {
 	unsigned char checksum;
 	long recordPos; // Position inside record data field
@@ -44,21 +44,21 @@ void HEXFile::writeRecord( ofstream & f, HEXRecord * recp )
 
 	/* Write record header */
 	f.fill('0');
-	f << ":" << hex
-		<< setw(2) << (long) recp->length
-		<< setw(4) << (long) recp->offset
-		<< setw(2) << (long) recp->type;
+	f << ":" << std::hex
+		<< std::setw(2) << (long) recp->length
+		<< std::setw(4) << (long) recp->offset
+		<< std::setw(2) << (long) recp->type;
 
 	/* Write data bytes */
 	for( recordPos = 0; recordPos < recp->length; recordPos++ )
 	{
 		checksum += recp->data[ recordPos ]; // Further checksum calculation
-		f << hex << setw(2) << (long) recp->data[ recordPos ];
+		f << std::hex << std::setw(2) << (long) recp->data[ recordPos ];
 	}
 
 	/* Write checksum */
 	checksum = 0 - checksum; // Final checksum preparation
-	f << setw(2) << (long) checksum << endl;
+	f << std::setw(2) << (long) checksum << std::endl;
 
 	/* Check for errors */
 	if( !f.good() )
@@ -66,7 +66,7 @@ void HEXFile::writeRecord( ofstream & f, HEXRecord * recp )
 }
 
 
-void HEXFile::parseRecord( const string & hexLine, HEXRecord * recp )
+void HEXFile::parseRecord( const std::string & hexLine, HEXRecord * recp )
 {
 	unsigned char checksum;
 	long recordPos; // Position inside record data fields.
@@ -144,17 +144,17 @@ HEXFile::~HEXFile()
 }
 
 
-void HEXFile::readFile( const string & _filename )
+void HEXFile::readFile( const std::string & _filename )
 {
-	ifstream f;
-	string hexLine; // Contains one line of the HEX file.
+	std::ifstream f;
+	std::string hexLine; // Contains one line of the HEX file.
 	HEXRecord rec; // Temp record.
 
 	long baseAddress; // Base address for extended addressing modes.
 	long dataPos; // Data position in record.
 
 	/* Attempt to open file */
-	f.open( _filename.c_str(), ios::in );
+	f.open( _filename.c_str(), std::ios::in );
 	if( !f )
 		throw new ErrorMsg( "Error opening HEX file for input!" );
 
@@ -231,9 +231,9 @@ void HEXFile::readFile( const string & _filename )
 }
 
 
-void HEXFile::writeFile( const string & _filename )
+void HEXFile::writeFile( const std::string & _filename )
 {
-	ofstream f;
+	std::ofstream f;
 	HEXRecord rec; // Temp record.
 
 	long baseAddress; // Absolute data position.
@@ -248,7 +248,7 @@ void HEXFile::writeFile( const string & _filename )
 	} status; // Write status, see usage below.
 
 	/* Attempt to create file */
-	f.open( _filename.c_str(), ios::out );
+	f.open( _filename.c_str(), std::ios::out );
 	if( !f )
 		throw new ErrorMsg( "Error opening HEX file for output!" );
 

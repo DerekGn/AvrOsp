@@ -85,13 +85,13 @@ JobInfo::JobInfo()
 
 void JobInfo::parseCommandline( int argc, char *argv[] )
 {
-	char * param; // Temp string ptr for holding current parsed parameter.
+	char * param; // Temp std::string ptr for holding current parsed parameter.
 	int comma; // Temp position for comma separator in address ranges.
 
 	/* Get application directory */
-	string ownpath = argv[0];
+	std::string ownpath = argv[0];
 	int slash_pos = ownpath.find_last_of( "\\/" ); // Search for last og / or \.
-	if( slash_pos == string::npos ) // Not found?
+	if( slash_pos == std::string::npos ) // Not found?
 	{
 		ownpath.assign( "." ); // The current directory is the AVROSP EXE path also.
 	} else
@@ -242,7 +242,7 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 				if( strlen( param ) <= 2 )
 					throw new ErrorMsg( "Cannot use -d without the device name!" );
 
-				/* Copy device name string to class variable */
+				/* Copy device name std::string to class variable */
 				deviceName.assign( param + 2 );
 				break;
 
@@ -347,7 +347,7 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 				if( strlen( param ) <= 3 )
 					throw new ErrorMsg( "Cannot use -i without file name!" );
 
-				/* Copy file name string to correct class variable */
+				/* Copy file name std::string to correct class variable */
 				switch( param[2] )
 				{
 					case 'f' : // Flash input file.
@@ -406,7 +406,7 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 				if( strlen( param ) <= 3 )
 					throw new ErrorMsg( "Cannot use -o without file name!" );
 
-				/* Copy file name string to correct class variable */
+				/* Copy file name std::string to correct class variable */
 				switch( param[2] )
 				{
 					case 'f' : // Flash output file.
@@ -632,7 +632,7 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 			case 'Y' : //RC Calibrate (for AVR057)
                  RC_Calibrate = true;
                  if( strlen( param ) <= 2 )
-					cout<<"Flash Address not specified! OSCCAL value will not be written!\r\n";
+					std::cout<<"Flash Address not specified! OSCCAL value will not be written!\r\n";
 
 						try
 						{
@@ -655,7 +655,7 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 				if (strlen(param) <= 2)
 					throw new ErrorMsg("Cannot use -B without the ble device name!");
 
-				/* Copy ble device name string to class variable */
+				/* Copy ble device name std::string to class variable */
 				bleDeviceName.assign(param + 2);
 				useBle = true;
 				break;
@@ -669,76 +669,76 @@ void JobInfo::parseCommandline( int argc, char *argv[] )
 
 void JobInfo::help()
 {
-	cout
-		<< "Command Line Switches:" << endl
-		<< "        [-d device name] [-if infile] [-ie infile] [-of outfile] [-oe outfile]" << endl
-		<< "        [-s] [-O index] [-O#value] [-Sf addr] [-Se addr] [-e] [-p f|e|b]" << endl
-		<< "        [-r f|e|b] [-v f|e|b] [-l value] [-L value] [-y] [-f value] [-E value]" << endl
-		<< "        [-F value] [-G value] [-q] [-x value] [-af start,stop] [-ae start,stop]" << endl
-		<< "        [-c port] [-b h|s] [-g] [-z] [-Y] [-B ble name] [-h|?]" << endl
-		<< endl
-		<< "Parameters:" << endl
-		<< "d       Device name. Must be applied when programming the device." << endl
-		<< "if      Name of FLASH input file. Required for programming or verification" << endl
-		<< "        of the FLASH memory. The file format is Intel Extended HEX." << endl
-		<< "ie      Name of EEPROM input file. Required for programming or verification" << endl
-		<< "        of the EEPROM memory. The file format is Intel Extended HEX." << endl
-		<< "of      Name of FLASH output file. Required for readout of the FLASH memory." << endl
-		<< "        The file format is Intel Extended HEX." << endl
-		<< "oe      Name of EEPROM output file. Required for readout of the EEPROM" << endl
-		<< "        memory. The file format is Intel Extended HEX." << endl
-		<< "s       Read signature bytes." << endl;
+	std::cout
+		<< "Command Line Switches:" << std::endl
+		<< "        [-d device name] [-if infile] [-ie infile] [-of outfile] [-oe outfile]" << std::endl
+		<< "        [-s] [-O index] [-O#value] [-Sf addr] [-Se addr] [-e] [-p f|e|b]" << std::endl
+		<< "        [-r f|e|b] [-v f|e|b] [-l value] [-L value] [-y] [-f value] [-E value]" << std::endl
+		<< "        [-F value] [-G value] [-q] [-x value] [-af start,stop] [-ae start,stop]" << std::endl
+		<< "        [-c port] [-b h|s] [-g] [-z] [-Y] [-B ble name] [-h|?]" << std::endl
+		<< std::endl
+		<< "Parameters:" << std::endl
+		<< "d       Device name. Must be applied when programming the device." << std::endl
+		<< "if      Name of FLASH input file. Required for programming or verification" << std::endl
+		<< "        of the FLASH memory. The file format is Intel Extended HEX." << std::endl
+		<< "ie      Name of EEPROM input file. Required for programming or verification" << std::endl
+		<< "        of the EEPROM memory. The file format is Intel Extended HEX." << std::endl
+		<< "of      Name of FLASH output file. Required for readout of the FLASH memory." << std::endl
+		<< "        The file format is Intel Extended HEX." << std::endl
+		<< "oe      Name of EEPROM output file. Required for readout of the EEPROM" << std::endl
+		<< "        memory. The file format is Intel Extended HEX." << std::endl
+		<< "s       Read signature bytes." << std::endl;
 	getch();
-	cout
-		<< "O       Read oscillator calibration byte. 'index' is optional." << endl
-		<< "O#      User-defined oscillator calibration value." << endl
-		<< "Sf      Write oscillator cal. byte to FLASH memory. 'addr' is byte address." << endl
-		<< "Se      Write oscillator cal. byte to EEPROM memory. 'addr' is byte address." << endl
-		<< "e       Erase device. If applied with another programming parameter, the" << endl
-		<< "        device will be erased before any other programming takes place." << endl
-		<< "p       Program device; FLASH (f), EEPROM (e) or both (b). Corresponding" << endl
-		<< "        input files are required." << endl
-		<< "r       Read out device; FLASH (f), EEPROM (e) or both (b). Corresponding" << endl
-		<< "        output files are required" << endl
-		<< "v       Verify device; FLASH (f), EEPROM (e) or both (b). Can be used with" << endl
-		<< "        -p or alone. Corresponding input files are required." << endl
-		<< "l       Set lock byte. 'value' is an 8-bit hex. value." << endl
-		<< "L       Verify lock byte. 'value' is an 8-bit hex. value to verify against." << endl
-		<< "y       Read back lock byte." << endl
-		<< "f       Set fuse bytes. 'value' is a 16-bit hex. value describing the" << endl
-		<< "        settings for the upper and lower fuse bytes." << endl
-		<< "E       Set extended fuse byte. 'value' is an 8-bit hex. value describing the" << endl
-		<< "        extend fuse settings." << endl
-		<< "F       Verify fuse bytes. 'value' is a 16-bit hex. value to verify against." << endl;
+	std::cout
+		<< "O       Read oscillator calibration byte. 'index' is optional." << std::endl
+		<< "O#      User-defined oscillator calibration value." << std::endl
+		<< "Sf      Write oscillator cal. byte to FLASH memory. 'addr' is byte address." << std::endl
+		<< "Se      Write oscillator cal. byte to EEPROM memory. 'addr' is byte address." << std::endl
+		<< "e       Erase device. If applied with another programming parameter, the" << std::endl
+		<< "        device will be erased before any other programming takes place." << std::endl
+		<< "p       Program device; FLASH (f), EEPROM (e) or both (b). Corresponding" << std::endl
+		<< "        input files are required." << std::endl
+		<< "r       Read out device; FLASH (f), EEPROM (e) or both (b). Corresponding" << std::endl
+		<< "        output files are required" << std::endl
+		<< "v       Verify device; FLASH (f), EEPROM (e) or both (b). Can be used with" << std::endl
+		<< "        -p or alone. Corresponding input files are required." << std::endl
+		<< "l       Set lock byte. 'value' is an 8-bit hex. value." << std::endl
+		<< "L       Verify lock byte. 'value' is an 8-bit hex. value to verify against." << std::endl
+		<< "y       Read back lock byte." << std::endl
+		<< "f       Set fuse bytes. 'value' is a 16-bit hex. value describing the" << std::endl
+		<< "        settings for the upper and lower fuse bytes." << std::endl
+		<< "E       Set extended fuse byte. 'value' is an 8-bit hex. value describing the" << std::endl
+		<< "        extend fuse settings." << std::endl
+		<< "F       Verify fuse bytes. 'value' is a 16-bit hex. value to verify against." << std::endl;
 	getch();
-	cout
-		<< "G       Verify extended fuse byte. 'value' is an 8-bit hex. value to" << endl
-		<< "        verify against." << endl
-		<< "q       Read back fuse bytes." << endl
-		<< "x       Fill unspecified locations with a value (00-ff). The default is" << endl
-		<< "        to not program locations not specified in the input files." << endl
-		<< "af      FLASH address range. Specifies the address range of operations. The" << endl
-		<< "        default is the entire FLASH. Byte addresses in hex." << endl
-		<< "ae      EEPROM address range. Specifies the address range of operations." << endl
-		<< "        The default is the entire EEPROM. Byte addresses in hex." << endl
-		<< "c       Select communication port; 'COM1' to 'COM8'. If this parameter is" << endl
-		<< "        omitted the program will scan the COM ports for a programmer." << endl
-		<< "b       Get revisions; hardware revision (h) and software revision (s)." << endl
-		<< "g       Silent operation." << endl
-		<< "z       No progress indicator. E.g. if piping to a file for log purposes, use" << endl
-		<< "Y       Calibrate internal RC oscillator(AVR057). 'addr' is byte address" << endl
-		<< "        this option to avoid the characters used for the indicator." << endl
-		<< "B       Ble name. The name of the ble device to connect and flash." << endl
-		<< "h|?     Help information (overrides all other settings)." << endl
-		<< endl
-		<< "Example:" << endl
-		<< "        AVROSP -dATmega128 -ifmyapp.hex -pf" << endl;
+	std::cout
+		<< "G       Verify extended fuse byte. 'value' is an 8-bit hex. value to" << std::endl
+		<< "        verify against." << std::endl
+		<< "q       Read back fuse bytes." << std::endl
+		<< "x       Fill unspecified locations with a value (00-ff). The default is" << std::endl
+		<< "        to not program locations not specified in the input files." << std::endl
+		<< "af      FLASH address range. Specifies the address range of operations. The" << std::endl
+		<< "        default is the entire FLASH. Byte addresses in hex." << std::endl
+		<< "ae      EEPROM address range. Specifies the address range of operations." << std::endl
+		<< "        The default is the entire EEPROM. Byte addresses in hex." << std::endl
+		<< "c       Select communication port; 'COM1' to 'COM8'. If this parameter is" << std::endl
+		<< "        omitted the program will scan the COM ports for a programmer." << std::endl
+		<< "b       Get revisions; hardware revision (h) and software revision (s)." << std::endl
+		<< "g       Silent operation." << std::endl
+		<< "z       No progress indicator. E.g. if piping to a file for log purposes, use" << std::endl
+		<< "Y       Calibrate internal RC oscillator(AVR057). 'addr' is byte address" << std::endl
+		<< "        this option to avoid the characters used for the indicator." << std::endl
+		<< "B       Ble name. The name of the ble device to connect and flash." << std::endl
+		<< "h|?     Help information (overrides all other settings)." << std::endl
+		<< std::endl
+		<< "Example:" << std::endl
+		<< "        AVROSP -dATmega128 -ifmyapp.hex -pf" << std::endl;
 }
 
 
 long JobInfo::convertHex( char * txt )
 {
-	string t( txt );
+	std::string t( txt );
 	return Util.convertHex( t );
 }
 
@@ -749,7 +749,7 @@ void JobInfo::doJob()
 	SerialPort * com;
 	AVRProgrammer * prog;
 	AVRDevice * avr;
-	string programmerID;
+	std::string programmerID;
 	long sig0, sig1, sig2; // Signature bytes.
 
 	/* Set correct silent and progress indicator status */
@@ -913,11 +913,11 @@ void JobInfo::doDeviceIndependent( AVRProgrammer * prog )
 			throw new ErrorMsg( "Signature readout is not supported by this programmer!" );
 
 		/* No pass through Util, since user wants the info */
-		cout.fill( '0' );
-		cout << hex
-			<< "0x" << setw(2) << sig0 << " "
-			<< "0x" << setw(2) << sig1 << " "
-			<< "0x" << setw(2) << sig2 << endl;
+		std::cout.fill( '0' );
+		std::cout << std::hex
+			<< "0x" << std::setw(2) << sig0 << " "
+			<< "0x" << std::setw(2) << sig1 << " "
+			<< "0x" << std::setw(2) << sig2 << std::endl;
 	}
 
 	/* Get software version? */
@@ -928,7 +928,7 @@ void JobInfo::doDeviceIndependent( AVRProgrammer * prog )
 			throw new ErrorMsg( "Software revision readout is not supported by this programmer!" );
 
 		/* No pass through Util, since user wants the info */
-		cout << (char) (major & 0xff) << "." << (char) (minor & 0xff) << endl;
+		std::cout << (char) (major & 0xff) << "." << (char) (minor & 0xff) << std::endl;
 	}
 
 	/* Get software version? */
@@ -939,7 +939,7 @@ void JobInfo::doDeviceIndependent( AVRProgrammer * prog )
 			throw new ErrorMsg( "Hardware revision readout is not supported by this programmer!" );
 
 		/* No pass through Util, since user wants the info */
-		cout << (char) (major & 0xff) << "." << (char) (minor & 0xff) << endl;
+		std::cout << (char) (major & 0xff) << "." << (char) (minor & 0xff) << std::endl;
 	}
 }
 
@@ -1026,7 +1026,7 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		Util.log( "Reading lock bits...\r\n" );
 		if( !prog->readLockBits( &bits ) )
 			throw new ErrorMsg( "Lock bit readout is not supported by this programmer!" );
-		cout << "0x" << std::hex << setw(2) << bits << endl;
+		std::cout << "0x" << std::hex << std::setw(2) << bits << std::endl;
 	}
 
 
@@ -1039,13 +1039,13 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		Util.log( "Reading fuse bits...\r\n" );
 		if( !prog->readFuseBits( &bits ) )
 			throw new ErrorMsg( "Fuse bit readout is not supported by this programmer!" );
-		cout << "0x" << std::hex << setw(4) << bits << endl;
+		std::cout << "0x" << std::hex << std::setw(4) << bits << std::endl;
 
 		if( avr->getXFuseStatus() )
 		{
 			if( !prog->readExtendedFuseBits( &bits ) )
 				throw new ErrorMsg( "Extended fuse bit readout is not supported by this programmer!" );
-			cout << "0x" << std::hex << setw(2) << bits << endl;
+			std::cout << "0x" << std::hex << std::setw(2) << bits << std::endl;
 		}
 	}
 
@@ -1136,14 +1136,14 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		{
 			if( hex->getData( pos ) != hex_v->getData( pos ) )
 			{
-				cout << "Unequal at address 0x" << std::hex << pos << "!" << endl;
+				std::cout << "Unequal at address 0x" << std::hex << pos << "!" << std::endl;
 				break;
 			}
 		}
 
 		if( pos > hex->getRangeEnd() ) // All equal?
 		{
-			cout << "Equal!" << endl;
+			std::cout << "Equal!" << std::endl;
 		}
 
 		delete hex_v;
@@ -1216,14 +1216,14 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		{
 			if( hex->getData( pos ) != hex_v->getData( pos ) )
 			{
-				cout << "Unequal at address 0x" << std::hex << pos << "!" << endl;
+				std::cout << "Unequal at address 0x" << std::hex << pos << "!" << std::endl;
 				break;
 			}
 		}
 
 		if( pos > hex->getRangeEnd() ) // All equal?
 		{
-			cout << "Equal!" << endl;
+			std::cout << "Equal!" << std::endl;
 		}
 
 		delete hex_v;
@@ -1273,9 +1273,9 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		if( !prog->readLockBits( &bits ) )
 			throw new ErrorMsg( "Lock bit readout is not supported by this programmer!" );
 		if( bits == verifyLockBits )
-			cout << "Equal!" << endl;
+			std::cout << "Equal!" << std::endl;
 		else
-			cout << "Unequal!" << endl;
+			std::cout << "Unequal!" << std::endl;
 	}
 
 
@@ -1289,9 +1289,9 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		if( !prog->readFuseBits( &bits ) )
 			throw new ErrorMsg( "Fuse bit readout is not supported by this programmer!" );
 		if( bits == verifyFuseBits )
-			cout << "Equal!" << endl;
+			std::cout << "Equal!" << std::endl;
 		else
-			cout << "Unequal!" << endl;
+			std::cout << "Unequal!" << std::endl;
 	}
 
 
@@ -1305,9 +1305,9 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 		if( !prog->readExtendedFuseBits( &bits ) )
 			throw new ErrorMsg( "Extended fuse bit readout is not supported by this programmer!" );
 		if( bits == verifyExtendedFuseBits )
-			cout << "Equal!" << endl;
+			std::cout << "Equal!" << std::endl;
 		else
-			cout << "Unequal!" << endl;
+			std::cout << "Unequal!" << std::endl;
 	}
 
 
@@ -1321,7 +1321,7 @@ void JobInfo::doDeviceDependent( AVRProgrammer * prog, AVRDevice * avr )
 			pos = OSCCAL_Parameter;
 			if( !prog->readOSCCAL( pos, &OSCCAL_Parameter ) )
 				throw new ErrorMsg( "OSCCAL parameter readout is not supported by this programmer!" );
-			cout << "0x" << std::hex << setw(2) << OSCCAL_Parameter << endl;
+			std::cout << "0x" << std::hex << std::setw(2) << OSCCAL_Parameter << std::endl;
 		}
 	}
 

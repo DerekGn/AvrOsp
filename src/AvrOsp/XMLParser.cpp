@@ -33,21 +33,21 @@ enum XMLNodeType
 class XMLAbstractNode
 {
 	protected:
-		string name; // Name of this node.
+		std::string name; // Name of this node.
 		XMLNodeType type;
 
 	public:
 		/* Constructor */
-		XMLAbstractNode( const string & _name, XMLNodeType _type );
+		XMLAbstractNode( const std::string & _name, XMLNodeType _type );
 
 		/* Destructor */
 		~XMLAbstractNode();
 
 		/* Methods */
-		const string & getName();
+		const std::string & getName();
 		XMLNodeType getType();
 
-		bool isName( const string & _name ); // Compare name to _name.
+		bool isName( const std::string & _name ); // Compare name to _name.
 
 		virtual void print() = 0;
 };
@@ -57,19 +57,19 @@ class XMLAbstractNode
 class XMLTree : public XMLAbstractNode
 {
 	protected:
-		list<XMLAbstractNode *> nodes; // Nodes contained in this tree.
+		std::list<XMLAbstractNode *> nodes; // Nodes contained in this tree.
 
 	public:	
 		/* Constructor */
-		XMLTree( const string & _name );
+		XMLTree( const std::string & _name );
 
 		/* Destructor */
 		~XMLTree();
 
 		/* Methods */
 		void addNode( XMLAbstractNode * newnode );
-		bool containsNode( const string & _name ); // Searches for name in list.
-		XMLAbstractNode * getNode( const string & _name );
+		bool containsNode( const std::string & _name ); // Searches for name in list.
+		XMLAbstractNode * getNode( const std::string & _name );
 
 		void print();
 };
@@ -79,18 +79,18 @@ class XMLTree : public XMLAbstractNode
 class XMLNode : public XMLAbstractNode
 {
 	protected:
-		string value; // String value.
+		std::string value; // std::string value.
 
 	public:
 		/* Constructor */
-		XMLNode( const string & _name, const string & _value );
+		XMLNode( const std::string & _name, const std::string & _value );
 
 		/* Destructor */
 		~XMLNode();
 
 		/* Methods */
 		bool isEmpty(); // Contains an empty string?
-		const string & getValue();
+		const std::string & getValue();
 
 		void print();
 };	
@@ -98,7 +98,7 @@ class XMLNode : public XMLAbstractNode
 
 
 
-void XMLFile::removeComments( string & txt )
+void XMLFile::removeComments( std::string & txt )
 {
 	long pos = 0; // Everything up to this point is clean.
 
@@ -112,7 +112,7 @@ void XMLFile::removeComments( string & txt )
 		startFoundAt = txt.find( "<!--", pos );
 
 		/* Exit the search loop if no comment is found */
-		if( startFoundAt == string::npos )
+		if( startFoundAt == std::string::npos )
 		{
 			pos = txt.size();
 			break;
@@ -122,7 +122,7 @@ void XMLFile::removeComments( string & txt )
 		endFoundAt = txt.find( "-->", startFoundAt );
 
 		/* Error if start but no end is found */
-		if( endFoundAt == string::npos )
+		if( endFoundAt == std::string::npos )
 			throw new ErrorMsg( "Unclosed comment tag encountered! "
 					"Comment start-tag '<!--' found, but no "
 					"closing '-->'." );
@@ -135,7 +135,7 @@ void XMLFile::removeComments( string & txt )
 	} while( pos < txt.size() );
 }
 
-void XMLFile::removeStartXML( string & txt )
+void XMLFile::removeStartXML( std::string & txt )
 {
 	long pos = 0; // Everything up to this point is clean.
 
@@ -146,7 +146,7 @@ void XMLFile::removeStartXML( string & txt )
 	startFoundAt = txt.find( "<?xml", pos );
 
 	/* Exit the search loop if not found */
-	if( startFoundAt == string::npos )
+	if( startFoundAt == std::string::npos )
 	{
 		pos = txt.size();
 		return;
@@ -160,7 +160,7 @@ void XMLFile::removeStartXML( string & txt )
 }
 
 
-void XMLFile::removeAttributes( string & txt )
+void XMLFile::removeAttributes( std::string & txt )
 {
 	long pos; // Everything up to this point is clean.
 
@@ -187,14 +187,14 @@ void XMLFile::removeAttributes( string & txt )
 		startFoundAt = txt.find( "<", pos );
 
 		/* Exit loop if no tag is found */
-		if( startFoundAt == string::npos )
+		if( startFoundAt == std::string::npos )
 			break;
 
 		/* Search for comment end */
 		endFoundAt = txt.find( ">", startFoundAt );
 
 		/* Error if start but no end is found */
-		if( endFoundAt == string::npos )
+		if( endFoundAt == std::string::npos )
 			throw new ErrorMsg( "Unclosed tag encountered! "
 					"Tag start token '<' found, but not "
 					"closing '>'." );
@@ -203,12 +203,12 @@ void XMLFile::removeAttributes( string & txt )
 		while( txt[startFoundAt+1] == ' ' )
 		{
 			txt.erase( startFoundAt+1, 1 ); // Remove.
-			endFoundAt--; // String has now shrunk.
+			endFoundAt--; // std::string has now shrunk.
 		}
 
 		/* Search for space before attributes */
 		spaceFoundAt = txt.find( " ", startFoundAt );
-		if( spaceFoundAt < endFoundAt && spaceFoundAt != string::npos ) // Space found inside tag?
+		if( spaceFoundAt < endFoundAt && spaceFoundAt != std::string::npos ) // Space found inside tag?
 		{
 			// If empty tag, we dont want to remove the / in />
 			if ( txt.at(endFoundAt-1) == '/' )
@@ -218,7 +218,7 @@ void XMLFile::removeAttributes( string & txt )
               
 			/* Remove attributes */
 			txt.erase( spaceFoundAt, endFoundAt - spaceFoundAt );
-			endFoundAt -= endFoundAt - spaceFoundAt; // String has now shrunk.
+			endFoundAt -= endFoundAt - spaceFoundAt; // std::string has now shrunk.
 		}
 
 
@@ -228,18 +228,18 @@ void XMLFile::removeAttributes( string & txt )
 }
 
 
-void XMLFile::readFile( const string & _filename )
+void XMLFile::readFile( const std::string & _filename )
 {
-	ifstream f; // XML file stream.
-	string contents; // XML file contents.
-	string templine;
+	std::ifstream f; // XML file stream.
+	std::string contents; // XML file contents.
+	std::string templine;
 
 	/* Attempt to open file */
-	f.open( _filename.c_str(), ios::in );
+	f.open( _filename.c_str(), std::ios::in );
 	if( !f )
 		throw new ErrorMsg( "Error opening XML file for input!" );
 
-	/* Read everything into the contents string */
+	/* Read everything into the contents std::string */
 	contents.erase();
 	templine.erase();
 	do
@@ -263,16 +263,16 @@ void XMLFile::readFile( const string & _filename )
 }
 
 
-void XMLFile::parseFragment( string & fragment, XMLTree * parent )
+void XMLFile::parseFragment( std::string & fragment, XMLTree * parent )
 {
 	long startFoundAt; // Tag start and end found at these positions.
 	long endFoundAt;
 
-	string closingString; // Search string used for finding closing tag.
+	std::string closingString; // Search std::string used for finding closing tag.
 	long closingFoundAt; // Closing tag found at this position.
 
-	string tagName; // These are for recently created nodes.
-	string tagValue;
+	std::string tagName; // These are for recently created nodes.
+	std::string tagValue;
 
 	XMLTree * newTree;
 	XMLNode * newNode;	
@@ -286,7 +286,7 @@ void XMLFile::parseFragment( string & fragment, XMLTree * parent )
 	{
 		/* Find start of tag */
 		startFoundAt = fragment.find( "<", 0 );
-		if( startFoundAt == string::npos ) // Exit loop if no tags found.
+		if( startFoundAt == std::string::npos ) // Exit loop if no tags found.
 			break;
 
 		/* Check if this is a closing tag for a higher level tag pair */
@@ -295,7 +295,7 @@ void XMLFile::parseFragment( string & fragment, XMLTree * parent )
 
 		/* Find end of tag */
 		endFoundAt = fragment.find( ">", startFoundAt );
-		if( endFoundAt == string::npos ) // Error if end not found.
+		if( endFoundAt == std::string::npos ) // Error if end not found.
 			throw new ErrorMsg( "Unclosed tag encountered! "
 					"Tag start token '<' found, but no "
 					"closing '>'." );
@@ -323,7 +323,7 @@ void XMLFile::parseFragment( string & fragment, XMLTree * parent )
 			closingString.erase();
 			closingString += "</" + tagName + ">";
 			closingFoundAt = fragment.find( closingString, 0 );
-			if( closingFoundAt == string::npos ) // Error if not found.
+			if( closingFoundAt == std::string::npos ) // Error if not found.
 				throw new ErrorMsg( "Closing tag not found! "
 						"Opening tag '<" + tagName + ">' found, "
 						"but not closing '" + closingString + "'." );
@@ -347,7 +347,7 @@ void XMLFile::parseFragment( string & fragment, XMLTree * parent )
 
 				/* Check that we can still find the closing tag */
 				closingFoundAt = fragment.find( closingString, 0 );
-				if( closingFoundAt == string::npos )
+				if( closingFoundAt == std::string::npos )
 					throw new ErrorMsg( "Closing tag not found! "
 							"Opening tag '<" + tagName + ">' found, "
 							"but not closing '" + closingString + "'." );
@@ -361,7 +361,7 @@ void XMLFile::parseFragment( string & fragment, XMLTree * parent )
 
 
 /* Constructor */
-XMLFile::XMLFile( const string & _filename )
+XMLFile::XMLFile( const std::string & _filename )
 {
 	readFile( _filename );
 }
@@ -375,13 +375,13 @@ XMLFile::~XMLFile()
 }
 
 
-bool XMLFile::exists( const string & path )
+bool XMLFile::exists( const std::string & path )
 {
 	XMLAbstractNode * currentNode = root;
 	XMLTree * currentTree;
 	long namePos; // Position for current tag name in path.
 	long separatorPos; // Position for #-separator following tag name.
-	string tagName; // Current tag name.
+	std::string tagName; // Current tag name.
 
 	namePos = 0;
 
@@ -389,7 +389,7 @@ bool XMLFile::exists( const string & path )
 	{
 		/* Find separator or set pos to end of text */
 		separatorPos = path.find( "\\", namePos );
-		if( separatorPos == string::npos )
+		if( separatorPos == std::string::npos )
 			separatorPos = path.size();
 
 		/* Extract tag name and check if it exists */
@@ -421,13 +421,13 @@ bool XMLFile::exists( const string & path )
 }
 
 
-const string & XMLFile::getValue( const string & path )
+const std::string & XMLFile::getValue( const std::string & path )
 {
 	XMLAbstractNode * currentNode = root;
 	XMLTree * currentTree;
 	long namePos; // Position for current tag name in path.
 	long separatorPos; // Position for #-separator following tag name.
-	string tagName; // Current tag name.
+	std::string tagName; // Current tag name.
 
 	namePos = 0;
 
@@ -435,7 +435,7 @@ const string & XMLFile::getValue( const string & path )
 	{
 		/* Find separator or set pos to end of text */
 		separatorPos = path.find( "\\", namePos );
-		if( separatorPos == string::npos )
+		if( separatorPos == std::string::npos )
 			separatorPos = path.size();
 
 		/* Extract tag name and check if it exists */
@@ -478,7 +478,7 @@ void XMLFile::print()
 
 
 /* Constructor */
-XMLAbstractNode::XMLAbstractNode( const string & _name, XMLNodeType _type ) :
+XMLAbstractNode::XMLAbstractNode( const std::string & _name, XMLNodeType _type ) :
 	name( _name ),
 	type( _type )
 {
@@ -493,7 +493,7 @@ XMLAbstractNode::~XMLAbstractNode()
 }
 
 
-const string & XMLAbstractNode::getName()
+const std::string & XMLAbstractNode::getName()
 {
 	return name;
 }
@@ -505,14 +505,14 @@ XMLNodeType XMLAbstractNode::getType()
 }
 
 
-bool XMLAbstractNode::isName( const string & _name )
+bool XMLAbstractNode::isName( const std::string & _name )
 {
 	return (name == _name);
 }
 
 
 /* Constructor */
-XMLTree::XMLTree( const string & _name ) :
+XMLTree::XMLTree( const std::string & _name ) :
 	XMLAbstractNode::XMLAbstractNode( _name, xml_subtree )
 {
 	// No code here.
@@ -523,7 +523,7 @@ XMLTree::XMLTree( const string & _name ) :
 XMLTree::~XMLTree()
 {
 	/* Create an iterator for the list */
-	list<XMLAbstractNode *>::iterator i;
+	std::list<XMLAbstractNode *>::iterator i;
 
 	/* Destruct all contained nodes */
 	for( i = nodes.begin(); i != nodes.end(); i++ )
@@ -539,10 +539,10 @@ void XMLTree::addNode( XMLAbstractNode * newnode )
 }
 
 
-bool XMLTree::containsNode( const string & _name )
+bool XMLTree::containsNode( const std::string & _name )
 {
 	/* Create an iterator for the list */
-	list<XMLAbstractNode *>::iterator i;
+	std::list<XMLAbstractNode *>::iterator i;
 
 	/* Search for the node with name _name */
 	i = nodes.begin();
@@ -559,10 +559,10 @@ bool XMLTree::containsNode( const string & _name )
 }
 
 
-XMLAbstractNode * XMLTree::getNode( const string & _name )
+XMLAbstractNode * XMLTree::getNode( const std::string & _name )
 {
 	/* Create an iterator for the list */
-	list<XMLAbstractNode *>::iterator i;
+	std::list<XMLAbstractNode *>::iterator i;
 
 	/* Search for the node with name _name */
 	i = nodes.begin();
@@ -582,9 +582,9 @@ XMLAbstractNode * XMLTree::getNode( const string & _name )
 void XMLTree::print()
 {
 	/* Create an iterator for the list */
-	list<XMLAbstractNode *>::iterator i;
+	std::list<XMLAbstractNode *>::iterator i;
 
-	cout << "TREE[ Name: \"" << name << "\" ]:" << endl;
+	std::cout << "TREE[ Name: \"" << name << "\" ]:" << std::endl;
 
 	/* Search for the node with name _name */
 	i = nodes.begin();
@@ -596,12 +596,12 @@ void XMLTree::print()
 		i++;
 	}
 
-	cout << ":END[\"" << name << "\"]" << endl;
+	std::cout << ":END[\"" << name << "\"]" << std::endl;
 }
 
 
 /* Constructor */
-XMLNode::XMLNode( const string & _name, const string & _value ) :
+XMLNode::XMLNode( const std::string & _name, const std::string & _value ) :
 	XMLAbstractNode::XMLAbstractNode( _name, xml_node ),
 	value( _value )
 {
@@ -622,7 +622,7 @@ bool XMLNode::isEmpty()
 }
 
 
-const string & XMLNode::getValue()
+const std::string & XMLNode::getValue()
 {
 	return value;
 }
@@ -630,7 +630,7 @@ const string & XMLNode::getValue()
 
 void XMLNode::print()
 {
-	cout << "NODE[ Name: \"" << name << "\" Value: \"" << value << "\" ]" << endl; 
+	std::cout << "NODE[ Name: \"" << name << "\" Value: \"" << value << "\" ]" << std::endl;
 }
 
 /* end of file */

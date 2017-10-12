@@ -22,8 +22,6 @@
 #ifndef ERRORMSG_HPP
 #define ERRORMSG_HPP
 
-using namespace std;
-
 #include <stdlib.h>
 #include <iostream>
 #include <string>
@@ -32,17 +30,17 @@ using namespace std;
 class ErrorMsg
 {
 	protected:
-		string message; // Contains the error message.
+		std::string message; // Contains the error message.
 
 	public:
-		// Constructors taking the string as parameter.
-		ErrorMsg( const string & _message );
+		// Constructors taking the std::string as parameter.
+		ErrorMsg( const std::string & _message );
 
 		// Destructor
 		~ErrorMsg();
 
 		// Function returning the error msg.
-		virtual const string & What();
+		virtual const std::string & What();
 };
 
 #endif

@@ -22,7 +22,7 @@
 #include "ErrorMsg.hpp"
 
 
-ErrorMsg::ErrorMsg( const string & _message ) :
+ErrorMsg::ErrorMsg( const std::string & _message ) :
 	message( _message )
 {
 	// No code here.
@@ -37,7 +37,7 @@ ErrorMsg::~ErrorMsg()
 
 
 /* Get message */
-const string & ErrorMsg::What()
+const std::string & ErrorMsg::What()
 {
 	return message;
 }

@@ -21,8 +21,6 @@
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
 
-using namespace std;
-
 #ifndef NOREGISTRY
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -52,26 +50,26 @@ class Utility
 		void muteLog() { noLog = true; }
 		void muteProgress() { noProgress = true; }
 
-		void log( const string & txt );
-		void progress( const string & txt );
+		void log( const std::string & txt );
+		void progress( const std::string & txt );
 
-		long convertHex( const string & txt );
-		string convertLong( long num, long radix = 10 );
+		long convertHex( const std::string & txt );
+		std::string convertLong( long num, long radix = 10 );
 
-		void parsePath( vector<string> & list );
-		bool fileExists( string filename );
-		void saveString( string txt, string filename );
+		void parsePath( std::vector<std::string> & list );
+		bool fileExists( std::string filename );
+		void saveString( std::string txt, std::string filename );
 
-		string getLastError();
+		std::string getLastError();
 
 		void handleMallocFailure(unsigned long size);
 
-		string guidToString(GUID uuid);
+		std::string guidToString(GUID uuid);
 
-		string convertToString(wstring value);
+		std::string convertToString(std::wstring value);
 
 #ifndef NOREGISTRY	
-		string getRegistryValue( const string & path, const string & value );
+		std::string getRegistryValue( const std::string & path, const std::string & value );
 #endif
 };
 
