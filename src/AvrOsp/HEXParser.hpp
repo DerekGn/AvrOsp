@@ -21,13 +21,14 @@
 #ifndef HEXPARSER_HPP
 #define HEXPARSER_HPP
 
-using namespace std;
 
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+
+using namespace std;
 
 struct HEXRecord; // Preliminary definition.
 

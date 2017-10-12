@@ -22,7 +22,6 @@
 #ifndef JOBINFO_HPP
 #define JOBINFO_HPP
 
-using namespace std;
 
 #include <iostream>
 #include <vector>
@@ -36,6 +35,7 @@ using namespace std;
 #include "SerialPort.hpp"
 #include "Utility.hpp"
 
+using namespace std;
 
 class JobInfo
 {

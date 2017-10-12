@@ -23,14 +23,13 @@
 #ifndef AVRDEVICE_HPP
 #define AVRDEVICE_HPP
 
-using namespace std;
-
-
 #include <string>
 #include <vector>
 #include "Utility.hpp"
 #include "XMLParser.hpp"
 #include "ErrorMsg.hpp"
+
+using namespace std;
 
 class AVRDevice
 {

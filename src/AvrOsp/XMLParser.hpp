@@ -22,13 +22,13 @@
 #ifndef XMLPARSER_HPP
 #define XMLPARSER_HPP
 
-using namespace std;
-
 #include "ErrorMsg.hpp"
 #include "Utility.hpp"
 #include <iostream>
 #include <fstream>
 #include <list>
+
+using namespace std;
 
 class XMLAbstractNode; // Preliminary definitions.
 class XMLTree;

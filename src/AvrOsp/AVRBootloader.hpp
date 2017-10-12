@@ -23,10 +23,10 @@
 #ifndef AVRBOOTLOADER_HPP
 #define AVRBOOTLOADER_HPP
 
-using namespace std;
-
 #include "AVRProgrammer.hpp"
 #include "Utility.hpp"
+
+using namespace std;
 
 class AVRBootloader : public AVRProgrammer
 {

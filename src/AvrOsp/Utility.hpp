@@ -21,8 +21,6 @@
 #ifndef UTILITY_HPP
 #define UTILITY_HPP
 
-using namespace std;
-
 #ifndef NOREGISTRY
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -34,6 +32,8 @@ using namespace std;
 #include <vector>
 #include <string>
 #include "ErrorMsg.hpp"
+
+using namespace std;
 
 class Utility
 {

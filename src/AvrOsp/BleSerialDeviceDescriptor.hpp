@@ -22,10 +22,10 @@
 #ifndef BLESERIALDEVICEDESCRIPTOR_HPP
 #define BLESERIALDEVICEDESCRIPTOR_HPP
 
-using namespace std;
-
 #include <Rpc.h>
 #include <string>
+
+using namespace std;
 
 class BleSerialDeviceDescriptor
 {

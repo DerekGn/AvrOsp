@@ -24,11 +24,11 @@
 #ifndef AVRPROGRAMMER_HPP
 #define AVRPROGRAMMER_HPP
 
-using namespace std;
-
 #include "ErrorMsg.hpp"
 #include "HEXParser.hpp"
 #include "CommChannel.hpp"
+
+using namespace std;
 
 class AVRProgrammer
 {

@@ -22,7 +22,6 @@
 #ifndef SERIALPORT_HPP
 #define SERIALPORT_HPP
 
-using namespace std;
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -31,6 +30,7 @@ using namespace std;
 #include "CommChannel.hpp"
 #include "ErrorMsg.hpp"
 
+using namespace std;
 
 class SerialPort : public CommChannel
 {
