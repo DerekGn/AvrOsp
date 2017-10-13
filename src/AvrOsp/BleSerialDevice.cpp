@@ -34,7 +34,7 @@ using namespace Windows::Storage::Streams;
 using namespace Windows::Devices::Bluetooth;
 
 static const GUID UUID_SERIAL_SERVICE = { 0x49535343, 0xFE7D, 0x4AE5,{ 0x8F, 0xA9, 0x9F, 0xAF, 0xD2, 0x05, 0xE4, 0x55 } };
-static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x8841, 0x43F4,{ 0xA8, 0xD4, 0xEC, 0xBE, 0x34, 0x72, 0x9B, 0xB3 } };
+static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
 static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
 
 IAsyncAction writeDeviceDataAsync(const GattCharacteristic & txCharacteristic, DataWriter writer)
@@ -84,6 +84,16 @@ void BleSerialDevice::openChannel()
 {
 	OpenDeviceAsync(deviceAddress, device, txCharacteristic, rxCharacteristic).GetResults();
 
+	rxCharacteristic.ValueChanged([&](GattCharacteristic characteristic, GattValueChangedEventArgs eventArgs)
+	{
+		auto reader = DataReader::FromBuffer(eventArgs.CharacteristicValue());
+
+		for (int i = 0; i < reader.UnconsumedBufferLength(); i++)
+		{
+			buffer.push_back(reader.ReadByte());
+		}
+	});
+
 	channelOpen = true;
 }
 
@@ -107,7 +117,13 @@ void BleSerialDevice::sendByte(long data)
 
 long BleSerialDevice::getByte()
 {
-	return 0;
+	if(buffer.size() < 0)
+	{ 
+	}
+
+	long result = buffer.front();
+	buffer.pop_front();
+	return result;
 }
 
 void BleSerialDevice::flushTX()
