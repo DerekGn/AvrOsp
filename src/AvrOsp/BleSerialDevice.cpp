@@ -22,6 +22,8 @@
 
 #include "BleSerialDevice.hpp"
 
+#include <array>
+
 #include "winrt\Windows.Storage.Streams.h"
 #include "winrt\Windows.Devices.Bluetooth.h"
 #include "winrt\Windows.Devices.Bluetooth.GenericAttributeProfile.h"
@@ -35,7 +37,13 @@ static const GUID UUID_SERIAL_SERVICE = { 0x49535343, 0xFE7D, 0x4AE5,{ 0x8F, 0xA
 static const GUID UUID_TX_CHARACTERISTIC = { 0x49535343, 0x8841, 0x43F4,{ 0xA8, 0xD4, 0xEC, 0xBE, 0x34, 0x72, 0x9B, 0xB3 } };
 static const GUID UUID_RX_CHARACTERISTIC = { 0x49535343, 0x1E4D, 0x4BD9,{ 0xBA, 0x61, 0x23, 0xC6, 0x47, 0x24, 0x96, 0x16 } };
 
-IAsyncAction OpenDeviceAsync(unsigned long long deviceAddress, BluetoothLEDevice & device, GattCharacteristic & txCharacteristic, GattCharacteristic & rxCharacteristic)
+IAsyncAction writeDeviceDataAsync(const GattCharacteristic & txCharacteristic, DataWriter writer)
+{
+	auto status = co_await txCharacteristic.WriteValueAsync(writer.DetachBuffer(), GenericAttributeProfile::GattWriteOption::WriteWithoutResponse);
+}
+
+IAsyncAction OpenDeviceAsync(unsigned long long deviceAddress, BluetoothLEDevice & device, 
+	GattCharacteristic & txCharacteristic, GattCharacteristic & rxCharacteristic)
 {
 	device = co_await BluetoothLEDevice::FromBluetoothAddressAsync(deviceAddress);
 
@@ -91,6 +99,10 @@ void BleSerialDevice::sendByte(long data)
 {
 	if (!channelOpen)
 		throw new ErrorMsg("Channel not open! Cannot send to unopened channel.");
+
+	DataWriter writer;
+	writer.WriteByte(data);
+	writeDeviceDataAsync(txCharacteristic, writer).get();
 }
 
 long BleSerialDevice::getByte()
@@ -108,4 +120,6 @@ void BleSerialDevice::flushRX()
 
 void BleSerialDevice::sendMultiple(unsigned char * data, long bufsize)
 {
+	if (!channelOpen)
+		throw new ErrorMsg("Channel not open! Cannot send to unopened channel.");
 }

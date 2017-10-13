@@ -27,6 +27,8 @@
 
 #include "winrt\Windows.Devices.Bluetooth.h"
 
+#include <deque>
+
 using namespace winrt;
 using namespace Windows::Devices::Bluetooth;
 using namespace Windows::Devices::Bluetooth::GenericAttributeProfile;
@@ -34,6 +36,8 @@ using namespace Windows::Devices::Bluetooth::GenericAttributeProfile;
 class BleSerialDevice : public CommChannel
 {
 	private:
+		std::deque<long> buffer;
+
 		bool channelOpen; // Is channel open?
 
 		unsigned long long deviceAddress;
